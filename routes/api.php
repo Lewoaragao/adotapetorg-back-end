@@ -21,9 +21,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/test', function (Request $request) {
 
     // dd($request -> headers -> all());
-    dd($request -> headers -> get('Authorization'));
+    // dd($request -> headers -> get('Authorization'));
 
     $response = new \Illuminate\Http\Response(json_encode(['msg' => 'Minha primeira resposta de API']));
     $response -> header('Content-Type', 'application/json');
     return $response;
+});
+
+// Products Route
+Route::get('/products', function () {
+    return \App\Product::all();
 });
