@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// ROTAS DE TESTE
 Route::get('/test', function (Request $request) {
 
     // dd($request -> headers -> all());
@@ -28,7 +29,28 @@ Route::get('/test', function (Request $request) {
     return $response;
 });
 
-// Products Route
-Route::get('/products', function () {
-    return \App\Product::all();
+// ROTAS DE PRODUTO
+// ANTIGO
+// Route::get('/products', function () {
+    // return \App\Models\Product::all();
+// });
+
+// NOVO
+// Route::get('/products', '\App\Http\Controllers\Api\ProductController@index');
+
+// AGRUPANDO
+Route::namespace('App\Http\Controllers\Api')->group(function(){
+
+    // ROTA PRODUTOS
+    Route::prefix('products')->group(function(){
+        Route::get('/', 'ProductController@index');
+        Route::get('/{id}', 'ProductController@show');
+        Route::post('/', 'ProductController@save');
+        Route::put('/', 'ProductController@update');
+        Route::patch('/', 'ProductController@update'); // pedaços de atualização de um objeto
+        Route::delete('/{id}', 'ProductController@delete');
+    });
+
+    Route::resource('/users', 'UserController');
+
 });
