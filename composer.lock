@@ -1376,16 +1376,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.3.9",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "c1e114f74e518daca2729ea8c4bf1167038fa4b5"
+                "reference": "d44a24690f16b8c1808bf13b1bd54ae4c63ea048"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c1e114f74e518daca2729ea8c4bf1167038fa4b5",
-                "reference": "c1e114f74e518daca2729ea8c4bf1167038fa4b5",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/d44a24690f16b8c1808bf13b1bd54ae4c63ea048",
+                "reference": "d44a24690f16b8c1808bf13b1bd54ae4c63ea048",
                 "shasum": ""
             },
             "require": {
@@ -1421,7 +1421,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.4-dev"
+                    "dev-main": "2.5-dev"
                 }
             },
             "autoload": {
@@ -1478,7 +1478,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-15T14:07:24+00:00"
+            "time": "2023-03-24T15:16:10+00:00"
         },
         {
             "name": "league/config",
@@ -5863,16 +5863,16 @@
         },
         {
             "name": "nunomaduro/collision",
-            "version": "v7.3.2",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/collision.git",
-                "reference": "9e111c8d8e88862d334879853dc849542e4b015a"
+                "reference": "c680af93e414110b36056029f63120e6bc78f6e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/9e111c8d8e88862d334879853dc849542e4b015a",
-                "reference": "9e111c8d8e88862d334879853dc849542e4b015a",
+                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/c680af93e414110b36056029f63120e6bc78f6e3",
+                "reference": "c680af93e414110b36056029f63120e6bc78f6e3",
                 "shasum": ""
             },
             "require": {
@@ -5955,7 +5955,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-03-21T21:02:58+00:00"
+            "time": "2023-03-23T21:41:35+00:00"
         },
         {
             "name": "phar-io/manifest",
