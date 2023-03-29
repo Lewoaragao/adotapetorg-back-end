@@ -34,8 +34,14 @@ class ProductController extends Controller
         // teste de campos recebidos
         // return response()->json($request->all());
         $data = $request->all();
-        $product = $this->product->create($data);
-        return response()->json($product);
+        // $product = $this->product->create($data);
+        $this->product->create($data);
+        // return response()->json($product);
+        return response()->json(
+            ['data' => [
+                'msg' => 'Produto foi gravado com sucesso!'
+            ]]
+        );
     }
 
     public function update(Request $request){
