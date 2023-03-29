@@ -33,15 +33,19 @@ class ProductController extends Controller
     public function save(Request $request){
         // teste de campos recebidos
         // return response()->json($request->all());
-        $data = $request->all();
+        // $data = $request->all();
         // $product = $this->product->create($data);
-        $this->product->create($data);
         // return response()->json($product);
-        return response()->json(
-            ['data' => [
-                'msg' => 'Produto foi gravado com sucesso!'
-            ]]
-        );
+
+        // $data = $request->all();
+        // $this->product->create($data);
+        // return response()->json(
+        //     ['data' => [
+        //         'msg' => 'Produto foi gravado com sucesso!'
+        //     ]]
+        // );
+
+        return response()->json($request);
     }
 
     public function update(Request $request){
