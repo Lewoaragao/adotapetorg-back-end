@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// ROTAS DE TESTE
+// INICIO ROTAS DE TESTE
 Route::get('/test', function (Request $request) {
 
     // dd($request -> headers -> all());
@@ -54,3 +54,19 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
     Route::resource('/users', 'UserController');
 
 });
+// FIM ROTAS DE TESTE
+
+// INICIO ROTAS DE PRODUCAO
+Route::namespace('App\Http\Controllers\Api')->group(function(){
+
+    // ROTA PETS
+    Route::prefix('pets')->group(function(){
+        Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
+        Route::post('/', 'PetController@store'); // SALVA UM PET
+        Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
+        Route::put('/{id}', 'PetController@update'); // ATUALIZA UM PET
+        Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
+    });
+
+});
+// FIM ROTAS DE PRODUCAO
