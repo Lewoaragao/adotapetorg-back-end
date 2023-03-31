@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,3 +71,5 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
 
 });
 // FIM ROTAS DE PRODUCAO
+
+URL::forceScheme('https');
