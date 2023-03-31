@@ -39,6 +39,7 @@ Route::post('/test', function (Request $request) {
     $response -> header('Content-Type', 'application/json');
     return $response;
 });
+Route::post('/testSavePet', 'ProductController@save');
 
 // ROTAS DE PRODUTO
 // ANTIGO

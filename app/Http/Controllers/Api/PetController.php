@@ -31,8 +31,8 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        // $data = $request->all();
-        // $pet = $this->pet->create($data);
+        $data = $request->all();
+        $pet = $this->pet->create($data);
 
         // $pet = Pet::create([
         //     'usuario_id' => $request->usuario_id,
@@ -42,8 +42,8 @@ class PetController extends Controller
         //     'adotado' => $request->adotado,
         // ]);
 
-        // return response()->json($pet);
-        return response()->json($request);
+        return response()->json($pet);
+        // return response()->json($request);
     }
 
     /**
