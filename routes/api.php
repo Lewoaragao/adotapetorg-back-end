@@ -25,7 +25,17 @@ Route::get('/test', function (Request $request) {
     // dd($request -> headers -> all());
     // dd($request -> headers -> get('Authorization'));
 
-    $response = new \Illuminate\Http\Response(json_encode(['msg' => 'Minha primeira resposta de API']));
+    $response = new \Illuminate\Http\Response(json_encode(['msg' => 'Minha primeira resposta de API // TESTE MÉTODO GET']));
+    $response -> header('Content-Type', 'application/json');
+    return $response;
+});
+
+Route::post('/test', function (Request $request) {
+
+    // dd($request -> headers -> all());
+    // dd($request -> headers -> get('Authorization'));
+
+    $response = new \Illuminate\Http\Response(json_encode(['msg' => 'TESTE METODO POST']));
     $response -> header('Content-Type', 'application/json');
     return $response;
 });
