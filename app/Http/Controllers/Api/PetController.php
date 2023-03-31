@@ -31,8 +31,17 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $pet = $this->pet->create($data);
+        // $data = $request->all();
+        // $pet = $this->pet->create($data);
+
+        $pet = Pet::create([
+            'usuario_id' => $request->usuario_id,
+            'nome' => $request->nome,
+            'raca' => $request->raca,
+            'data_nascimento' => $request->data_nascimento,
+            'adotado' => $request->adotado,
+        ]);
+
         return response()->json($pet);
     }
 
