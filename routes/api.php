@@ -39,7 +39,6 @@ Route::post('/test', function (Request $request) {
     $response -> header('Content-Type', 'application/json');
     return $response;
 });
-Route::post('/testSavePet', 'ProductController@save');
 
 // ROTAS DE PRODUTO
 // ANTIGO
@@ -66,6 +65,8 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
     Route::resource('/users', 'UserController');
 
 });
+
+Route::post('/testSavePet', 'PetController@store');
 // FIM ROTAS DE TESTE
 
 // INICIO ROTAS DE PRODUCAO
