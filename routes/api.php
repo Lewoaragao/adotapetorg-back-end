@@ -66,7 +66,7 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
 
 });
 
-Route::post('/testSavePet', 'PetController@store');
+Route::post('/testSavePet', '\App\Http\Controllers\Api\PetController@store');
 // FIM ROTAS DE TESTE
 
 // INICIO ROTAS DE PRODUCAO
