@@ -42,15 +42,8 @@ class PetController extends Controller
         //     'adotado' => $request->adotado,
         // ]);
 
-        $pet = Pet::factory()->create([
-            'usuario_id' => $request->usuario_id,
-            'nome' => $request->nome,
-            'raca' => $request->raca,
-            'data_nascimento' => $request->data_nascimento,
-            'adotado' => $request->adotado,
-        ]);
-
-        return response()->json($pet);
+        // return response()->json($pet);
+        return response()->json($request);
     }
 
     /**
