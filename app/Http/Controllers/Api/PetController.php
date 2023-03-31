@@ -34,7 +34,15 @@ class PetController extends Controller
         // $data = $request->all();
         // $pet = $this->pet->create($data);
 
-        $pet = Pet::create([
+        // $pet = Pet::create([
+        //     'usuario_id' => $request->usuario_id,
+        //     'nome' => $request->nome,
+        //     'raca' => $request->raca,
+        //     'data_nascimento' => $request->data_nascimento,
+        //     'adotado' => $request->adotado,
+        // ]);
+
+        $pet = Pet::factory()->create([
             'usuario_id' => $request->usuario_id,
             'nome' => $request->nome,
             'raca' => $request->raca,
