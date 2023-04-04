@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Http\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ Route::get('/test', function (Request $request) {
     // dd($request -> headers -> all());
     // dd($request -> headers -> get('Authorization'));
 
-    $response = new \Illuminate\Http\Response(json_encode(['msg' => 'Minha primeira resposta de API // TESTE MÉTODO GET']));
+    $response = new Response(json_encode(['msg' => 'Minha primeira resposta de API // TESTE MÉTODO GET']));
     $response -> header('Content-Type', 'application/json');
     return $response;
 });
@@ -35,7 +35,7 @@ Route::post('/test', function (Request $request) {
     // dd($request -> headers -> all());
     // dd($request -> headers -> get('Authorization'));
 
-    $response = new \Illuminate\Http\Response(json_encode(['msg' => 'TESTE METODO POST']));
+    $response = new Response(json_encode(['msg' => 'TESTE METODO POST']));
     $response -> header('Content-Type', 'application/json');
     return $response;
 });
@@ -56,7 +56,7 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
     Route::prefix('products')->group(function(){
         Route::get('/', 'ProductController@index');
         Route::get('/{id}', 'ProductController@show');
-        Route::post('/', 'ProductController@save');
+        Route::post('/', 'ProductController@save')->middleware('auth.basic');
         Route::put('/', 'ProductController@update');
         Route::patch('/', 'ProductController@update'); // pedaços de atualização de um objeto
         Route::delete('/{id}', 'ProductController@delete');
@@ -83,5 +83,3 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
 
 });
 // FIM ROTAS DE PRODUCAO
-
-URL::forceScheme('https');
