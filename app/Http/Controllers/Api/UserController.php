@@ -3,16 +3,29 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    /**
+     * @var user
+     */
+    private $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(['message' => __METHOD__]);
+        $users = $this->user->paginate(10);
+        return response()->json($users);
     }
 
     /**
@@ -20,7 +33,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json(['message' => __METHOD__]);
+        $data = $request->all();
+        $user = $this->user->create($data);
+        return response()->json($user);
     }
 
     /**
@@ -28,15 +43,28 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(['message' => __METHOD__]);
+        $user = $this->user->find($id);
+
+        if($user == null) {
+            return response()->json(
+                ['data' => [
+                    'msg' => 'Usuário não encontrado!'
+                ]]
+            );
+        }
+
+        return response()->json($user);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        return response()->json(['message' => __METHOD__]);
+        $data = $request->all();
+        $user = $this->user->find($data['id']);
+        $user->update($data);
+        return response()->json($user);
     }
 
     /**
@@ -44,6 +72,12 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        return response()->json(['message' => __METHOD__]);
+        $user = $this->user->find($id);
+        $user->delete();
+        return response()->json(
+            ['data' => [
+                'msg' => 'Usuário foi removido com sucesso!'
+            ]]
+        );
     }
 }

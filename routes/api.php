@@ -19,67 +19,31 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// INICIO ROTAS DE TESTE
+// ROTA DE TESTE PARA SABER SE API ESTÁ FUNCIONANDO
 Route::get('/test', function (Request $request) {
-
-    // dd($request -> headers -> all());
-    // dd($request -> headers -> get('Authorization'));
-
-    $response = new Response(json_encode(['msg' => 'Minha primeira resposta de API // TESTE MÉTODO GET']));
+    $response = new Response(json_encode(['msg' => 'Minha primeira resposta de API']));
     $response -> header('Content-Type', 'application/json');
     return $response;
 });
 
-Route::post('/test', function (Request $request) {
-
-    // dd($request -> headers -> all());
-    // dd($request -> headers -> get('Authorization'));
-
-    $response = new Response(json_encode(['msg' => 'TESTE METODO POST']));
-    $response -> header('Content-Type', 'application/json');
-    return $response;
-});
-
-// ROTAS DE PRODUTO
-// ANTIGO
-// Route::get('/products', function () {
-    // return \App\Models\Product::all();
-// });
-
-// NOVO
-// Route::get('/products', '\App\Http\Controllers\Api\ProductController@index');
-
-// AGRUPANDO
 Route::namespace('App\Http\Controllers\Api')->group(function(){
 
-    // ROTA PRODUTOS
-    Route::prefix('products')->group(function(){
-        Route::get('/', 'ProductController@index');
-        Route::get('/{id}', 'ProductController@show');
-        Route::post('/', 'ProductController@save')->middleware('auth.basic');
-        Route::put('/', 'ProductController@update');
-        Route::patch('/', 'ProductController@update'); // pedaços de atualização de um objeto
-        Route::delete('/{id}', 'ProductController@delete');
+    // ROTA USERS
+    Route::prefix('users')->group(function(){
+        Route::get('/', 'UserController@index'); // LISTA TODOS OS USER
+        Route::post('/', 'UserController@store'); // SALVA UM USER
+        Route::get('/{id}', 'UserController@show'); // MOSTRA UM USER
+        Route::put('/', 'UserController@update'); // ATUALIZA UM USER
+        Route::delete('/{id}', 'UserController@destroy'); // DELETA UM USER
     });
-
-    Route::resource('/users', 'UserController');
-
-});
-
-Route::post('/testSavePet', '\App\Http\Controllers\Api\PetController@store');
-// FIM ROTAS DE TESTE
-
-// INICIO ROTAS DE PRODUCAO
-Route::namespace('App\Http\Controllers\Api')->group(function(){
 
     // ROTA PETS
     Route::prefix('pets')->group(function(){
         Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
         Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
-        Route::put('/{id}', 'PetController@update'); // ATUALIZA UM PET
+        Route::put('/', 'PetController@update'); // ATUALIZA UM PET
         Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
     });
 
 });
-// FIM ROTAS DE PRODUCAO
