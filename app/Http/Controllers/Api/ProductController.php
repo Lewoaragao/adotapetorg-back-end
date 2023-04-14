@@ -14,23 +14,27 @@ class ProductController extends Controller
      */
     private $product;
 
-    public function __construct(Product $product) {
+    public function __construct(Product $product)
+    {
         $this->product = $product;
     }
 
-    public function index(){
+    public function index()
+    {
         // $products = $this->product->all();
         // COM PAGINAÇÃO
         $products = $this->product->paginate(1);
         return response()->json($products);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $product = $this->product->find($id);
         return response()->json($product);
     }
 
-    public function save(Request $request){
+    public function save(Request $request)
+    {
         // teste de campos recebidos
         // return response()->json($request->all());
         $data = $request->all();
@@ -38,14 +42,16 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $data = $request->all();
         $product = $this->product->find($data['id']);
         $product->update($data);
         return response()->json($product);
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $product = $this->product->find($id);
         $product->delete();
         return response()->json(
