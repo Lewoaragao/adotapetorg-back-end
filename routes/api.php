@@ -32,7 +32,7 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
     Route::prefix('users')->group(function(){
         Route::get('/', 'UserController@index'); // LISTA TODOS OS USER
         Route::post('/', 'UserController@store'); // SALVA UM USER
-        Route::get('/{id}', 'UserController@show'); // MOSTRA UM USER
+        Route::get('/{id}', 'UserController@show')->middleware('auth.basic'); // MOSTRA UM USER
         Route::put('/', 'UserController@update'); // ATUALIZA UM USER
         Route::delete('/{id}', 'UserController@destroy'); // DELETA UM USER
     });
