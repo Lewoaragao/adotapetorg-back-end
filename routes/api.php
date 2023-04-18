@@ -46,4 +46,10 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
         Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
     });
 
+    Route::post('login', 'LoginController@loginUser');
+    Route::group(['middleware' => 'auth:sanctum'],function(){
+        Route::get('user', 'LoginController@userDetails');
+        Route::get('logout', 'LoginController@logout');
+    });
 });
+

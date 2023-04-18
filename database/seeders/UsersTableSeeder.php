@@ -16,9 +16,10 @@ class UsersTableSeeder extends Seeder
         User::factory(10)->create();
 
         // CRIA UM USER COM DADOS DEFINIDOS
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => bcrypt(123),
+        ]);
     }
 }
