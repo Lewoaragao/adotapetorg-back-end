@@ -46,7 +46,7 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
         Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
     });
 
-    Route::post('/login', function (Request $request) {
+    Route::post('/loginTeste', function (Request $request) {
         $response = new Response(json_encode(['msg' => 'Minha primeira resposta de API']));
         $response -> header('Content-Type', 'application/json');
         return $response;
