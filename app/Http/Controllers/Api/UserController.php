@@ -8,23 +8,12 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
-    /**
-     * @var user
-     */
-    private $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = $this->user->paginate(10);
+        $users = User::paginate(10);
         return response()->json($users);
     }
 
@@ -33,8 +22,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $user = User::where('email', $request['email'])->first();
+
+        if($user != null) {
+            return response()->json(
+                ['data' => [
+                    'msg' => 'E-mail já cadastrado.'
+                ]]
+            );
+        }
+
+        $request['password'] = bcrypt($request['password']);
         $data = $request->all();
-        $user = $this->user->create($data);
+        $user = User::create($data);
         return response()->json($user);
     }
 
@@ -43,7 +43,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = $this->user->find($id);
+        $user = User::find($id);
 
         if($user == null) {
             return response()->json(
@@ -62,7 +62,7 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $data = $request->all();
-        $user = $this->user->find($data['id']);
+        $user = User::find($data['id']);
         $user->update($data);
         return response()->json($user);
     }
@@ -72,7 +72,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = $this->user->find($id);
+        $user = User::find($id);
         $user->delete();
         return response()->json(
             ['data' => [
