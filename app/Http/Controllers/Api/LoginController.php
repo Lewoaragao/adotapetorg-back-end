@@ -47,24 +47,24 @@ class LoginController extends Controller
         return Response(['message' => 'email or password wrong'], 401);
     }
 
-    public function userDetails(): Response
-    {
-        if (Auth::check()) {
+    // public function userDetails(): Response
+    // {
+    //     if (Auth::check()) {
 
-            $user = Auth::user();
+    //         $user = Auth::user();
 
-            return Response(['data' => $user], 200);
-        }
+    //         return Response(['data' => $user], 200);
+    //     }
 
-        return Response(['data' => 'Unauthorized'], 401);
-    }
+    //     return Response(['data' => 'Unauthorized'], 401);
+    // }
 
-    public function logout(): Response
-    {
-        $user = Auth::user();
+    // public function logout(): Response
+    // {
+    //     $user = Auth::user();
 
-        $user->currentAccessToken()->delete();
+    //     $user->currentAccessToken()->delete();
 
-        return Response(['data' => 'User Logout successfully.'], 200);
-    }
+    //     return Response(['data' => 'User Logout successfully.'], 200);
+    // }
 }
