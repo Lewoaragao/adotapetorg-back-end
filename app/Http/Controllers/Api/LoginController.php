@@ -25,24 +25,24 @@ class LoginController extends Controller
 
     public function loginUser(Request $request): Response
     {
-        // $validator = Validator::make($request->all(), [
-        //     'email' => 'required|email',
-        //     'password' => 'required',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        // if ($validator->fails()) {
+        if ($validator->fails()) {
 
-        //     return Response(['message' => $validator->errors()], 401);
-        // }
+            return Response(['message' => $validator->errors()], 401);
+        }
 
-        // if (Auth::attempt($request->all())) {
+        if (Auth::attempt($request->all())) {
 
-        //     $user = Auth::user();
+            $user = Auth::user();
 
-        //     $success =  $user->createToken('MyApp')->plainTextToken;
+            $success =  $user->createToken('MyApp')->plainTextToken;
 
-        //     return Response(['token' => $success], 200);
-        // }
+            return Response(['token' => $success], 200);
+        }
 
         return Response(['message' => 'email or password wrong'], 401);
     }
