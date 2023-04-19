@@ -46,14 +46,15 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
         Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
     });
 
-    Route::post('/loginTeste', function (Request $request) {
-        $response = new Response(json_encode(['msg' => 'Minha primeira resposta de API']));
-        $response -> header('Content-Type', 'application/json');
-        return $response;
-    });
+
     Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get('/user', 'LoginController@userDetails');
         Route::get('/logout', 'LoginController@logout');
     });
 });
 
+Route::get('/loginTeste', function (Request $request) {
+    $response = new Response(json_encode(['msg' => 'Teste login api']));
+    $response -> header('Content-Type', 'application/json');
+    return $response;
+});
