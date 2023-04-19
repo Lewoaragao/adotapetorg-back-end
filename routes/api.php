@@ -53,8 +53,8 @@ Route::namespace('App\Http\Controllers\Api')->group(function(){
     });
 });
 
-Route::get('/loginTeste', function (Request $request) {
-    $response = new Response(json_encode(['msg' => 'Teste login api']));
+Route::get('/outroTeste', function (Request $request) {
+    $response = new Response(json_encode(['msg' => 'Outro teste']));
     $response -> header('Content-Type', 'application/json');
     return $response;
 });
