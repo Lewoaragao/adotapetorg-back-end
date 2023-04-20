@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -24,7 +25,7 @@ class UserController extends Controller
     {
         $user = User::where('email', $request['email'])->first();
 
-        if($user != null) {
+        if ($user != null) {
             return response()->json(
                 ['data' => [
                     'msg' => 'E-mail já cadastrado.'
@@ -45,11 +46,12 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if($user == null) {
+        if ($user == null) {
             return response()->json(
                 ['data' => [
-                    'msg' => 'Usuário não encontrado!'
-                ]]
+                    'msg' => 'Usuário não encontrado'
+                ]],
+                Response::HTTP_NOT_FOUND
             );
         }
 
@@ -72,14 +74,14 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-
         $user = User::find($id);
 
-        if($user == null) {
+        if ($user == null) {
             return response()->json(
                 ['data' => [
-                    'msg' => 'Usuário não encontrado!'
-                ]]
+                    'msg' => 'Usuário não encontrado'
+                ]],
+                Response::HTTP_NOT_FOUND
             );
         }
 
