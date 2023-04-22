@@ -32,7 +32,7 @@ class UserController extends Controller
             );
         }
 
-        $request['password'] = bcrypt($request['password']);
+        $request['senha'] = bcrypt($request['senha']);
         $data = $request->all();
         $user = User::create($data);
         return response()->json($user);
