@@ -1,0 +1,6 @@
+Execute os seguintes comandos na ordem:
+1 - crie o usuario no MySQL com username root e senha 123456
+2 - crie um banco de dados chamado adotapetorg
+3 - php composer.phar install
+4 - php artisan migrate
+5 - php artisan config:cache
