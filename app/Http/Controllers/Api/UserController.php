@@ -27,9 +27,8 @@ class UserController extends Controller
 
         if ($user != null) {
             return response()->json(
-                ['data' => [
-                    'msg' => 'E-mail já cadastrado.'
-                ]]
+                ['erro' => 'E-mail já cadastrado.'],
+                Response::HTTP_CONFLICT
             );
         }
 
@@ -48,9 +47,7 @@ class UserController extends Controller
 
         if ($user == null) {
             return response()->json(
-                ['data' => [
-                    'msg' => 'Usuário não encontrado'
-                ]],
+                ['erro' => 'Usuário não encontrado'],
                 Response::HTTP_NOT_FOUND
             );
         }
