@@ -15,7 +15,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(10);
-        return response()->json($users);
+        return Response($users);
     }
 
     /**
@@ -26,16 +26,13 @@ class UserController extends Controller
         $user = User::where('email', $request['email'])->first();
 
         if ($user != null) {
-            return response()->json(
-                ['erro' => 'E-mail já cadastrado.'],
-                Response::HTTP_CONFLICT
-            );
+            return Response(['message' => 'E-mail já cadastrado'], Response::HTTP_CONFLICT);
         }
 
         $request['senha'] = bcrypt($request['senha']);
         $data = $request->all();
         $user = User::create($data);
-        return response()->json($user);
+        return Response(['message' => 'Usuário cadastrado com sucesso'], Response::HTTP_OK);
     }
 
     /**
@@ -46,13 +43,10 @@ class UserController extends Controller
         $user = User::find($id);
 
         if ($user == null) {
-            return response()->json(
-                ['erro' => 'Usuário não encontrado'],
-                Response::HTTP_NOT_FOUND
-            );
+            return Response(['message' => 'Usuário não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        return response()->json($user);
+        return Response($user);
     }
 
     /**
@@ -63,7 +57,7 @@ class UserController extends Controller
         $data = $request->all();
         $user = User::find($data['id']);
         $user->update($data);
-        return response()->json($user);
+        return Response($user);
     }
 
     /**
@@ -74,19 +68,10 @@ class UserController extends Controller
         $user = User::find($id);
 
         if ($user == null) {
-            return response()->json(
-                ['data' => [
-                    'msg' => 'Usuário não encontrado'
-                ]],
-                Response::HTTP_NOT_FOUND
-            );
+            return Response(['message' => 'Usuário não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
         $user->delete();
-        return response()->json(
-            ['data' => [
-                'msg' => 'Usuário foi removido com sucesso!'
-            ]]
-        );
+        return Response(['message' => 'Usuário foi removido com sucesso'], Response::HTTP_OK);
     }
 }

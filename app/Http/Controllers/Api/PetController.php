@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Pet;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class PetController extends Controller
 {
@@ -42,8 +43,7 @@ class PetController extends Controller
         //     'adotado' => $request->adotado,
         // ]);
 
-        return response()->json($pet);
-        // return response()->json($request);
+        return Response(['data' => $pet], Response::HTTP_OK);
     }
 
     /**
@@ -54,11 +54,7 @@ class PetController extends Controller
         $pet = $this->pet->find($id);
 
         if($pet == null) {
-            return response()->json(
-                ['data' => [
-                    'msg' => 'Pet não encontrado!'
-                ]]
-            );
+            return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
         return response()->json($pet);
@@ -79,10 +75,6 @@ class PetController extends Controller
     {
         $pet = $this->pet->find($id);
         $pet->delete();
-        return response()->json(
-            ['data' => [
-                'msg' => 'Pet foi removido com sucesso!'
-            ]]
-        );
+        return Response(['message' => 'Pet foi removido com sucesso'], Response::HTTP_OK);
     }
 }

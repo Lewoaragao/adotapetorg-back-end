@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -15,44 +16,32 @@ class LoginController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
+            'senha' => 'required',
         ]);
 
         if ($validator->fails()) {
-
-            return Response(['message' => $validator->errors()], 401);
+            return Response(['message' => $validator->messagers()], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (Auth::attempt($request->all())) {
+        $user = User::where('email', $request->email)->first();
 
-            $user = Auth::user();
-
-            $success =  $user->createToken('MyApp')->plainTextToken;
-
-            return Response(['token' => $success], 200);
+        if ($user && Hash::check($request->senha, $user->senha)) {
+            $success = $user->createToken('MyApp')->plainTextToken;
+            return Response(['token' => $success], Response::HTTP_OK);
         }
-
-        return Response(['message' => 'email or password wrong'], 401);
+        return Response(['message' => 'Email ou senha incorreto'], Response::HTTP_UNAUTHORIZED);
     }
 
     public function userDetails(): Response
     {
-        if (Auth::check()) {
-
-            $user = Auth::user();
-
-            return Response(['data' => $user], 200);
-        }
-
-        return Response(['data' => 'Unauthorized'], 401);
+        $user = Auth::user();
+        return Response(['data' => $user], Response::HTTP_OK);
     }
 
     public function logout(): Response
     {
         $user = Auth::user();
-
         $user->currentAccessToken()->delete();
-
-        return Response(['data' => 'User Logout successfully.'], 200);
+        return Response(['message' => 'Logout do usuário com sucesso'], Response::HTTP_OK);
     }
 }
