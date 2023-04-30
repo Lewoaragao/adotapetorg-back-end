@@ -27,7 +27,10 @@ class LoginController extends Controller
 
         if ($user && Hash::check($request->senha, $user->senha)) {
             $success = $user->createToken('MyApp')->plainTextToken;
-            return Response(['token' => $success], Response::HTTP_OK);
+            return Response([
+                'token' => $success,
+                'usuario' => $user
+            ], Response::HTTP_OK);
         }
         return Response(['message' => 'Email ou senha incorreto'], Response::HTTP_UNAUTHORIZED);
     }
@@ -35,7 +38,7 @@ class LoginController extends Controller
     public function userDetails(): Response
     {
         $user = Auth::user();
-        return Response(['data' => $user], Response::HTTP_OK);
+        return Response(['usuario' => $user], Response::HTTP_OK);
     }
 
     public function logout(): Response
