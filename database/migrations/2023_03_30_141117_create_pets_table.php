@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nome');
             $table->string('raca');
             $table->date('data_nascimento');
-            $table->boolean('adotado');
+            $table->boolean('adotado')->default(0);
             $table->timestamps();
         });
     }
