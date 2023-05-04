@@ -49,7 +49,7 @@ class PetController extends Controller
             'nome' => $request->nome,
             'raca' => $request->raca,
             'data_nascimento' => $request->data_nascimento,
-            'foto' => $caminhoImagem,
+            'imagem' => $caminhoImagem,
         ]);
 
         return Response(['message' => 'Pet cadastrado com sucesso', 'pet' => $pet], Response::HTTP_OK);
