@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pet extends Model
 {
-    // use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'usuario_id',
@@ -15,5 +15,6 @@ class Pet extends Model
         'raca',
         'data_nascimento',
         'adotado',
+        'foto'
     ];
 }

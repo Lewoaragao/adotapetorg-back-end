@@ -39,7 +39,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
         Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
-        Route::put('/', 'PetController@update'); // ATUALIZA UM PET
+        Route::put('/{id}', 'PetController@update'); // ATUALIZA UM PET
         Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
     });
 

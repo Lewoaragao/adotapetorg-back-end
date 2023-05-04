@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('raca');
             $table->date('data_nascimento');
             $table->boolean('adotado')->default(0);
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

@@ -22,7 +22,8 @@ class User extends Authenticatable
         'sobrenome',
         'email',
         'senha',
-        'flg_ativo'
+        'flg_ativo',
+        'foto'
     ];
 
     /**

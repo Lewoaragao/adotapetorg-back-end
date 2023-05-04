@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 
 class PetController extends Controller
 {
@@ -14,7 +15,8 @@ class PetController extends Controller
      */
     private $pet;
 
-    public function __construct(Pet $pet) {
+    public function __construct(Pet $pet)
+    {
         $this->pet = $pet;
     }
 
@@ -33,7 +35,18 @@ class PetController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $pet = Pet::create($data);
+        // $pet = Pet::create($data);
+
+        $foto = $request->foto->store('fotos', 'public');
+
+        $pet = Pet::create([
+            'usuario_id' => $request->usuario_id,
+            'nome' => $request->nome,
+            'raca' => $request->raca,
+            'data_nascimento' => $request->data_nascimento,
+            'foto' => $foto,
+        ]);
+
         return Response(['message' => 'Pet cadastrado com sucesso', 'pet' => $pet], Response::HTTP_OK);
     }
 
@@ -44,7 +57,7 @@ class PetController extends Controller
     {
         $pet = $this->pet->find($id);
 
-        if($pet == null) {
+        if ($pet == null) {
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
@@ -56,7 +69,27 @@ class PetController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $pet = Pet::find($id);
+
+        // if ($request->hasFile('foto')) {
+        //     $imagePath = 'storage/' . $pet->foto;
+
+        //     if (File::exists($imagePath)) {
+        //         File::delete($imagePath);
+        //     }
+
+            $foto = $request->foto->store('fotos', 'public');
+        // }
+
+        $pet->update([
+            'usuario_id' => $request->usuario_id,
+            'nome' => $request->nome,
+            'raca' => $request->raca,
+            'data_nascimento' => $request->data_nascimento,
+            'foto' => $foto,
+        ]);
+
+        return Response(['message' => 'Pet atualizado com sucesso', 'pet' => $pet], Response::HTTP_OK);
     }
 
     /**
