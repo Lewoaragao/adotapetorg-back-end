@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Pet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
 
 class PetController extends Controller
 {
@@ -34,12 +35,11 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        $caminhoImagem = "";
+        $caminhoImagem = "imagens/placeholder-pet.jpg";
 
-        if($request->has('imagem')) {
+        if($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
-
-            $nomeImagem = time().'.'.$imagem->getClientOriginalExtension();
+            $nomeImagem = Str::uuid()->toString().'.'.$imagem->getClientOriginalExtension();
             $imagem->move('api/imagens/', $nomeImagem);
             $caminhoImagem = 'imagens/'.$nomeImagem;
         }
