@@ -34,17 +34,22 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        // $pet = Pet::create($data);
+        $caminhoImagem = "";
 
-        $foto = $request->foto->store('fotos', 'public');
+        if($request->has('imagem')) {
+            $imagem = $request->file('imagem');
+
+            $nomeImagem = time().'.'.$imagem->getClientOriginalExtension();
+            $imagem->move('api/imagens/', $nomeImagem);
+            $caminhoImagem = 'imagens/'.$nomeImagem;
+        }
 
         $pet = Pet::create([
             'usuario_id' => $request->usuario_id,
             'nome' => $request->nome,
             'raca' => $request->raca,
             'data_nascimento' => $request->data_nascimento,
-            'foto' => $foto,
+            'foto' => $caminhoImagem,
         ]);
 
         return Response(['message' => 'Pet cadastrado com sucesso', 'pet' => $pet], Response::HTTP_OK);
