@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('cnpj')->nullable();
             $table->string('telefone');
             $table->boolean('telefone_is_whatsapp')->default(0);
-            $table->string('user_tipo');
+            $table->string('user_tipo')->default("user");
             $table->rememberToken();
             $table->timestamps();
         });
