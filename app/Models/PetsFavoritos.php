@@ -5,16 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pet extends Model
+class PetsFavoritos extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
+        protected $fillable = [
         'user_id',
-        'nome',
-        'raca',
-        'data_nascimento',
-        'adotado',
-        'imagem'
+        'pet_id',
+        'flg_ativo',
     ];
 }

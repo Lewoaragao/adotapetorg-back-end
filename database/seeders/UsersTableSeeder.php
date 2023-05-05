@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
         User::factory(10)->create();
 
         // CRIA UM USER COM DADOS DEFINIDOS
-        if(!User::where('email', '=', 'test@example.com')) {
+        if(User::where('email', 'test@example.com')->first() == null){
             User::factory()->create([
                 'nome' => 'Test User',
                 'sobrenome' => 'Sobrenome',
@@ -24,6 +24,5 @@ class UsersTableSeeder extends Seeder
                 'senha' => bcrypt(123),
             ]);
         }
-
     }
 }
