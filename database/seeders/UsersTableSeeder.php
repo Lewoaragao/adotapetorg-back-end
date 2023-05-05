@@ -16,12 +16,18 @@ class UsersTableSeeder extends Seeder
         User::factory(10)->create();
 
         // CRIA UM USER COM DADOS DEFINIDOS
-        if(!User::where('email', '=', 'test@example.com')) {
+        if (User::where('email', 'lewoaragao@gmail.com')->first() == null) {
             User::factory()->create([
-                'nome' => 'Test User',
-                'sobrenome' => 'Sobrenome',
-                'email' => 'test@example.com',
+                'nome' => 'Leonardo',
+                'sobrenome' => 'Aragão',
+                'email' => 'lewoaragao@gmail.com',
                 'senha' => bcrypt(123),
+                'rua_endereco' => 'Coronel',
+                'numero_endereco' => '1',
+                'bairro_endereco' => 'PK',
+                'estado_endereco' => 'CE',
+                'cidade_endereco' => 'Fortaleza',
+                'user_tipo' => 'admin',
             ]);
         }
 

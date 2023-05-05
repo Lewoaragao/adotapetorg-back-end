@@ -23,7 +23,18 @@ class User extends Authenticatable
         'email',
         'senha',
         'flg_ativo',
-        'foto'
+        'imagem',
+        'rua_endereco',
+        'numero_endereco',
+        'complemento_endereco',
+        'bairro_endereco',
+        'estado_endereco',
+        'cidade_endereco',
+        'cpf',
+        'cnpj',
+        'telefone',
+        'telefone_is_Whatsapp',
+        'user_tipo',
     ];
 
     /**
