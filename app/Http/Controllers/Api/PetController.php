@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pet;
+use App\Models\PetsFavoritos;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+
 
 class PetController extends Controller
 {
@@ -26,7 +31,7 @@ class PetController extends Controller
     public function index()
     {
         $pets = Pet::paginate(10);
-        return response()->json($pets);
+        return Response($pets);
     }
 
     /**
@@ -34,22 +39,21 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        $caminhoImagem = "";
+        $caminhoImagem = "imagens/placeholder-pet.jpg";
 
-        if($request->has('imagem')) {
+        if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
-
-            $nomeImagem = time().'.'.$imagem->getClientOriginalExtension();
+            $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
             $imagem->move('api/imagens/', $nomeImagem);
-            $caminhoImagem = 'imagens/'.$nomeImagem;
+            $caminhoImagem = 'imagens/' . $nomeImagem;
         }
 
         $pet = Pet::create([
-            'usuario_id' => $request->usuario_id,
+            'user_id' => $request->user_id,
             'nome' => $request->nome,
             'raca' => $request->raca,
             'data_nascimento' => $request->data_nascimento,
-            'foto' => $caminhoImagem,
+            'imagem' => $caminhoImagem,
         ]);
 
         return Response(['message' => 'Pet cadastrado com sucesso', 'pet' => $pet], Response::HTTP_OK);
@@ -60,7 +64,7 @@ class PetController extends Controller
      */
     public function show(string $id)
     {
-        $pet = $this->pet->find($id);
+        $pet = Pet::find($id);
 
         if ($pet == null) {
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
@@ -72,26 +76,29 @@ class PetController extends Controller
     /**
      * Atualize o recurso especificado no armazenamento.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        $pet = Pet::find($id);
+        $data = $request->all();
+        $pet = Pet::find($data['id']);
 
-        // if ($request->hasFile('foto')) {
-        //     $imagePath = 'storage/' . $pet->foto;
+        if ($request->hasFile('imagem')) {
+            $caminhoImagem = 'api/' . $pet->imagem;
 
-        //     if (File::exists($imagePath)) {
-        //         File::delete($imagePath);
-        //     }
+            if (File::exists($caminhoImagem)) {
+                File::delete($caminhoImagem);
+            }
 
-            $foto = $request->foto->store('fotos', 'public');
-        // }
+            $imagem = $request->file('imagem');
+            $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
+            $imagem->move('api/imagens/', $nomeImagem);
+            $caminhoImagem = 'imagens/' . $nomeImagem;
+        }
 
         $pet->update([
-            'usuario_id' => $request->usuario_id,
             'nome' => $request->nome,
             'raca' => $request->raca,
             'data_nascimento' => $request->data_nascimento,
-            'foto' => $foto,
+            'imagem' => $caminhoImagem
         ]);
 
         return Response(['message' => 'Pet atualizado com sucesso', 'pet' => $pet], Response::HTTP_OK);
@@ -102,8 +109,34 @@ class PetController extends Controller
      */
     public function destroy(string $id)
     {
-        $pet = $this->pet->find($id);
+        $pet = Pet::find($id);
         $pet->delete();
         return Response(['message' => 'Pet foi removido com sucesso'], Response::HTTP_OK);
+    }
+
+    public function favoritar(string $id) {
+        $pet = Pet::find($id);
+        $user = Auth::user();
+
+        $petFavoritado = PetsFavoritos::create([
+            'user_id' => $user->id,
+            'pet_id' => $pet->id
+        ]);
+
+        return Response(['message' => 'Pet foi favoritado com sucesso', 'pet' => $petFavoritado], Response::HTTP_OK);
+    }
+
+    public function petsFavoritosUser() {
+        $user = Auth::user();
+
+        $listIdPetsFavoritados = DB::table('pets_favoritos')
+        ->where('user_id', $user->id)
+        ->pluck('id');
+
+        $pets = DB::table('pets')
+        ->whereIn('id', $listIdPetsFavoritados)
+        ->get();
+
+        return Response($pets);
     }
 }

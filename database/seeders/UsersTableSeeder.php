@@ -30,6 +30,5 @@ class UsersTableSeeder extends Seeder
                 'user_tipo' => 'admin',
             ]);
         }
-
     }
 }
