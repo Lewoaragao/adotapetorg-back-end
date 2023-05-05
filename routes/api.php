@@ -30,7 +30,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::get('/', 'UserController@index'); // LISTA TODOS OS USER
         Route::post('/', 'UserController@store'); // SALVA UM USER
         Route::get('/{id}', 'UserController@show'); // MOSTRA UM USER
-        Route::post('/{id}', 'UserController@update'); // ATUALIZA UM USER
+        Route::post('/atualizar', 'UserController@update'); // ATUALIZA UM USER
         Route::delete('/{id}', 'UserController@destroy'); // DELETA UM USER
     });
 

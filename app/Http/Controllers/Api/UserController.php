@@ -65,12 +65,19 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        $userAuth = Auth::user();
-        $user = User::find($id);
+        $verificaEmail = User::where('email', $request['email'])->first();
 
-        if($userAuth->user_tipo !== "admin" && $userAuth->id !== $user->id) {
+        if ($verificaEmail != null) {
+            return Response(['message' => 'E-mail já cadastrado'], Response::HTTP_CONFLICT);
+        }
+
+        $data = $request->all();
+        $user = User::find($data['id']);
+        $userAuth = Auth::user();
+
+        if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $user->id) {
             return Response(['message' => 'Não é possível alterar os dados de outros usuário'], Response::HTTP_FORBIDDEN);
         }
 
@@ -89,9 +96,24 @@ class UserController extends Controller
             $caminhoImagem = 'imagens/' . $nomeImagem;
         }
 
-        $request['imagem'] = $caminhoImagem;
-        $data = $request->all();
-        $user->update($data);
+        $user->update([
+            'nome' => $request->nome,
+            'sobrenome' => $request->sobrenome,
+            'data_nascimento' => $request->data_nascimento,
+            'email' => $request->email,
+            'imagem' => $caminhoImagem,
+            'rua_endereco' => $request->rua_endereco,
+            'numero_endereco' => $request->numero_endereco,
+            'complemento_endereco' => $request->complemento_endereco,
+            'bairro_endereco' => $request->bairro_endereco,
+            'estado_endereco' => $request->estado_endereco,
+            'cidade_endereco' => $request->cidade_endereco,
+            'cpf' => $request->cpf,
+            'cnpj' => $request->cnpj,
+            'telefone' => $request->telefone,
+            'telefone_is_whatsapp' => $request->telefone_is_whatsapp,
+        ]);
+
         return Response($user);
     }
 

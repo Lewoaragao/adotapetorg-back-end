@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'nome',
         'sobrenome',
+        'data_nascimento',
         'email',
         'senha',
         'flg_ativo',
@@ -33,7 +34,7 @@ class User extends Authenticatable
         'cpf',
         'cnpj',
         'telefone',
-        'telefone_is_Whatsapp',
+        'telefone_is_whatsapp',
         'user_tipo',
     ];
 

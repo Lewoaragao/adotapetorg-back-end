@@ -20,6 +20,7 @@ class UsersTableSeeder extends Seeder
             User::factory()->create([
                 'nome' => 'Leonardo',
                 'sobrenome' => 'Aragão',
+                'data_nascimento' => date('1900-01-01'),
                 'email' => 'lewoaragao@gmail.com',
                 'senha' => bcrypt(123),
                 'rua_endereco' => 'Coronel',
