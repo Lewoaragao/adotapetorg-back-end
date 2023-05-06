@@ -214,7 +214,7 @@ class PetController extends Controller
         return Response(['message' => 'Pet foi desfavoritado com sucesso', 'pet' => $petDesfavoritado], Response::HTTP_OK);
     }
 
-    public function petsFavoritosUser(string $id)
+    public function petsFavoritosUser()
     {
         $user = Auth::user();
 
