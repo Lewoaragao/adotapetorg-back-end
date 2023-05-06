@@ -118,6 +118,14 @@ class PetController extends Controller
         $pet = Pet::find($id);
         $user = Auth::user();
 
+        $listIdPetsFavoritados = DB::table('pets_favoritos')
+        ->where('user_id', $user->id)
+        ->pluck('id');
+
+        if($listIdPetsFavoritados->contains($id)) {
+            return Response(['message' => 'Pet já favoritado'], Response::HTTP_CONFLICT);
+        }
+
         $petFavoritado = PetsFavoritos::create([
             'user_id' => $user->id,
             'pet_id' => $pet->id
