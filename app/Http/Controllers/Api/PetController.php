@@ -114,16 +114,43 @@ class PetController extends Controller
         return Response(['message' => 'Pet foi removido com sucesso'], Response::HTTP_OK);
     }
 
-    public function favoritar(string $id) {
+    public function favoritar(string $id)
+    {
         $pet = Pet::find($id);
         $user = Auth::user();
 
-        $listIdPetsFavoritados = DB::table('pets_favoritos')
-        ->where('user_id', $user->id)
-        ->pluck('id');
+        if ($pet == null) {
+            return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
+        }
 
-        if($listIdPetsFavoritados->contains($id)) {
-            return Response(['message' => 'Pet já favoritado'], Response::HTTP_CONFLICT);
+        $listIdPetsFavoritados = DB::table('pets_favoritos')
+            ->where('user_id', $user->id)
+            ->where('pet_id', $id)
+            ->pluck('pet_id');
+
+        $petFavoritadoIsAtivo = DB::table('pets_favoritos')
+            ->where('user_id', $user->id)
+            ->where('pet_id', $id)
+            ->get()
+            ->first();
+
+        if ($listIdPetsFavoritados->contains($id)) {
+            if ($petFavoritadoIsAtivo->flg_ativo == 1) {
+                return Response(['message' => 'Pet já favoritado'], Response::HTTP_CONFLICT);
+            } else {
+                DB::table('pets_favoritos')
+                    ->where('user_id', $user->id)
+                    ->where('pet_id', $id)
+                    ->update(['flg_ativo' => 1]);
+
+                $petFavoritado = DB::table('pets_favoritos')
+                    ->where('user_id', $user->id)
+                    ->where('pet_id', $id)
+                    ->get()
+                    ->first();
+
+                return Response(['message' => 'Pet foi favoritado com sucesso', 'pet' => $petFavoritado], Response::HTTP_OK);
+            }
         }
 
         $petFavoritado = PetsFavoritos::create([
@@ -134,16 +161,71 @@ class PetController extends Controller
         return Response(['message' => 'Pet foi favoritado com sucesso', 'pet' => $petFavoritado], Response::HTTP_OK);
     }
 
-    public function petsFavoritosUser() {
+    public function desfavoritar(string $id)
+    {
+        $pet = Pet::find($id);
+        $user = Auth::user();
+
+        if ($pet == null) {
+            return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        $listIdPetsFavoritados = DB::table('pets_favoritos')
+            ->where('user_id', $user->id)
+            ->where('pet_id', $id)
+            ->pluck('pet_id');
+
+        $petDesfavoritadoIsAtivo = DB::table('pets_favoritos')
+            ->where('user_id', $user->id)
+            ->where('pet_id', $id)
+            ->get()
+            ->first();
+
+        if ($listIdPetsFavoritados->contains($id)) {
+            if ($petDesfavoritadoIsAtivo->flg_ativo == 0) {
+                return Response(['message' => 'Pet já desfavoritado'], Response::HTTP_CONFLICT);
+            } else {
+                DB::table('pets_favoritos')
+                    ->where('user_id', $user->id)
+                    ->where('pet_id', $id)
+                    ->update(['flg_ativo' => 0]);
+
+                $petDesfavoritado = DB::table('pets_favoritos')
+                    ->where('user_id', $user->id)
+                    ->where('pet_id', $id)
+                    ->get()
+                    ->first();
+
+                return Response(['message' => 'Pet foi desfavoritado com sucesso', 'pet' => $petDesfavoritado], Response::HTTP_OK);
+            }
+        }
+
+        DB::table('pets_favoritos')
+            ->where('user_id', $user->id)
+            ->where('pet_id', $id)
+            ->update(['flg_ativo' => 0]);
+
+        $petDesfavoritado = DB::table('pets_favoritos')
+            ->where('user_id', $user->id)
+            ->where('pet_id', $id)
+            ->get()
+            ->first();
+
+        return Response(['message' => 'Pet foi desfavoritado com sucesso', 'pet' => $petDesfavoritado], Response::HTTP_OK);
+    }
+
+    public function petsFavoritosUser(string $id)
+    {
         $user = Auth::user();
 
         $listIdPetsFavoritados = DB::table('pets_favoritos')
-        ->where('user_id', $user->id)
-        ->pluck('id');
+            ->where('user_id', $user->id)
+            ->where('flg_ativo', 1)
+            ->pluck('pet_id');
 
         $pets = DB::table('pets')
-        ->whereIn('id', $listIdPetsFavoritados)
-        ->get();
+            ->whereIn('id', $listIdPetsFavoritados)
+            ->get();
 
         return Response($pets);
     }

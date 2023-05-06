@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->integer('user_id');
             $table->integer('pet_id');
-            $table->boolean('flg_ativo')->default(0);
+            $table->boolean('flg_ativo')->default(1);
             $table->timestamps();
         });
     }

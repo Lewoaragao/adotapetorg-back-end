@@ -28,8 +28,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
     // ROTA USERS
     Route::prefix('users')->group(function () {
         Route::get('/', 'UserController@index'); // LISTA TODOS OS USER
-        Route::post('/', 'UserController@store'); // SALVA UM USER
         Route::get('/{id}', 'UserController@show'); // MOSTRA UM USER
+        Route::post('/', 'UserController@store'); // SALVA UM USER
         Route::post('/atualizar', 'UserController@update'); // ATUALIZA UM USER
         Route::delete('/{id}', 'UserController@destroy'); // DELETA UM USER
     });
@@ -37,12 +37,13 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
     // ROTA PETS
     Route::prefix('pets')->group(function () {
         Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
-        Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
+        Route::get('/favoritos/user/teste/{id}', 'PetController@petsFavoritosUser'); // BUSCA OS PETS FAVORITOS DO USER
+        Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::post('/{id}', 'PetController@update'); // ATUALIZA UM PET
-        Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
         Route::post('/{id}/favoritar', 'PetController@favoritar'); // FAVORITA UM PET
-        Route::get('/favoritos/user', 'PetController@petsFavoritosUser'); // BUSCA OS PETS FAVORITOS DO USER
+        Route::post('/{id}/desfavoritar', 'PetController@desfavoritar'); // DESFAVORITA UM PET
+        Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
     });
 
     // ROTAS AUTH
