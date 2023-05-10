@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Pet;
 use App\Models\PetsFavoritos;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -70,7 +71,24 @@ class PetController extends Controller
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        return response()->json($pet);
+        $user = User::find($pet->user_id);
+        $pet_favoritado = false;
+
+        $is_favorito = DB::table('pets_favoritos')
+        ->where('user_id', $user->id)
+        ->where('pet_id', $id)
+        ->where('flg_ativo', 1)
+        ->get();
+
+        if(!$is_favorito->isEmpty()) {
+            $pet_favoritado = true;
+        }
+
+        return response()->json([
+            'pet' => $pet,
+            'user' => $user,
+            'pet_favoritado' => $pet_favoritado
+        ]);
     }
 
     /**
