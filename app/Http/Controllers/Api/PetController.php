@@ -75,12 +75,12 @@ class PetController extends Controller
         $pet_favoritado = false;
 
         $is_favorito = DB::table('pets_favoritos')
-        ->where('user_id', $user->id)
-        ->where('pet_id', $id)
-        ->where('flg_ativo', 1)
-        ->get();
+            ->where('user_id', $user->id)
+            ->where('pet_id', $id)
+            ->where('flg_ativo', 1)
+            ->get();
 
-        if(!$is_favorito->isEmpty()) {
+        if (!$is_favorito->isEmpty()) {
             $pet_favoritado = true;
         }
 
@@ -244,6 +244,17 @@ class PetController extends Controller
         $pets = DB::table('pets')
             ->whereIn('id', $listIdPetsFavoritados)
             ->get();
+
+        return Response($pets);
+    }
+
+    public function petsUser()
+    {
+        $user = Auth::user();
+
+        $pets = DB::table('pets')
+            ->where('user_id', $user->id)
+            ->paginate(10);
 
         return Response($pets);
     }
