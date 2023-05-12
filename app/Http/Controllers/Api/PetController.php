@@ -260,15 +260,4 @@ class PetController extends Controller
             ? Response(['message' => 'Nenhum pet cadastrado'], Response::HTTP_NOT_FOUND)
             : Response($pets);
     }
-
-    public function petsUser()
-    {
-        $user = Auth::user();
-
-        $pets = DB::table('pets')
-            ->where('user_id', $user->id)
-            ->paginate(10);
-
-        return Response($pets);
-    }
 }
