@@ -39,6 +39,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
         Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
         Route::post('/favoritos/user', 'PetController@petsFavoritosUser'); // BUSCA OS PETS FAVORITOS DO USER
+        Route::post('/cadastrados/user', 'PetController@petsCadastradosUser'); // BUSCA OS PETS CADASTRADOS DO USER
         Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::post('/{id}', 'PetController@update'); // ATUALIZA UM PET
         Route::post('/{id}/favoritar', 'PetController@favoritar'); // FAVORITA UM PET

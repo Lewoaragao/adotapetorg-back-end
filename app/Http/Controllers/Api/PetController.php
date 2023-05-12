@@ -84,7 +84,7 @@ class PetController extends Controller
             $pet_favoritado = true;
         }
 
-        return response()->json([
+        return Response([
             'pet' => $pet,
             'user' => $user,
             'pet_favoritado' => $pet_favoritado
@@ -245,6 +245,19 @@ class PetController extends Controller
             ->whereIn('id', $listIdPetsFavoritados)
             ->get();
 
-        return Response($pets);
+        return $pets->isEmpty() ?  Response(['message' => 'Nenhum pet favoritado'], Response::HTTP_NOT_FOUND) : Response($pets);
+    }
+
+    public function petsCadastradosUser()
+    {
+        $user = Auth::user();
+
+        $pets = DB::table('pets')
+            ->where('user_id', $user->id)
+            ->get();
+
+        return $pets->isEmpty()
+            ? Response(['message' => 'Nenhum pet cadastrado'], Response::HTTP_NOT_FOUND)
+            : Response($pets);
     }
 }
