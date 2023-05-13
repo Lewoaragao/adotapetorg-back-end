@@ -38,18 +38,18 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
     Route::prefix('pets')->group(function () {
         Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
         Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
-        Route::post('/favoritos/user', 'PetController@petsFavoritosUser'); // BUSCA OS PETS FAVORITOS DO USER
-        Route::post('/cadastrados/user', 'PetController@petsCadastradosUser'); // BUSCA OS PETS CADASTRADOS DO USER
         Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::post('/{id}', 'PetController@update'); // ATUALIZA UM PET
+        Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
         Route::post('/{id}/favoritar', 'PetController@favoritar'); // FAVORITA UM PET
         Route::post('/{id}/desfavoritar', 'PetController@desfavoritar'); // DESFAVORITA UM PET
-        Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
+        Route::post('/favoritos/user', 'PetController@petsFavoritosUser'); // BUSCA OS PETS FAVORITOS DO USER
+        Route::post('/cadastrados/user', 'PetController@petsCadastradosUser'); // BUSCA OS PETS CADASTRADOS DO USER
     });
 
     // ROTAS AUTH
-    Route::get('/user', 'LoginController@userDetails');
-    Route::get('/logout', 'LoginController@logout');
+    Route::get('/user', 'LoginController@userDetails'); // MOSTRA O USUARIO LOGADO
+    Route::get('/logout', 'LoginController@logout'); // DESLOGA USUARIO DA SESSAO
 });
 
 // ROTAS USUÁRIO NÃO AUTENTICADO
@@ -67,5 +67,5 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
     });
 
     // ROTA AUTH
-    Route::post('/login', 'LoginController@loginUser');
+    Route::post('/login', 'LoginController@loginUser'); // LOGA USUARIO NA SESSAO
 });
