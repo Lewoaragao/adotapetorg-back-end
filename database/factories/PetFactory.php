@@ -22,7 +22,7 @@ class PetFactory extends Factory
             'raca' => fake()->name(),
             'data_nascimento' => fake()->date(),
             'adotado' => fake()->boolean(),
-            'imagem' => 'placeholder-pet.jpg'
+            'imagem' => 'imagens/placeholder-pet.jpg'
         ];
     }
 }
