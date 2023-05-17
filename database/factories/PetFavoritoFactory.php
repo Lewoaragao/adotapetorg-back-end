@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pet>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PetFavorito>
  */
-class PetFactory extends Factory
+class PetFavoritoFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,11 +18,8 @@ class PetFactory extends Factory
     {
         return [
             'user_id' => fake()->numberBetween(1, 3),
-            'nome' => fake()->name(),
-            'raca' => fake()->name(),
-            'data_nascimento' => fake()->date(),
-            'adotado' => fake()->boolean(),
-            'imagem' => 'placeholder-pet.jpg'
+            'pet_id' => fake()->numberBetween(1, 20),
+            'flg_ativo' => fake()->boolean(),
         ];
     }
 }

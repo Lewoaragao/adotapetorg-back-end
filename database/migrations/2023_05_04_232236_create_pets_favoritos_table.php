@@ -12,10 +12,14 @@ return new class extends Migration {
     {
         Schema::create('pets_favoritos', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('pet_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('pet_id');
             $table->boolean('flg_ativo')->default(1);
             $table->timestamps();
+
+            // FOREIGN KEY
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('pet_id')->references('id')->on('pets');
         });
     }
 

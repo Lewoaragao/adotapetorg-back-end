@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pet;
-use App\Models\PetsFavoritos;
+use App\Models\PetFavorito;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -171,7 +171,7 @@ class PetController extends Controller
             }
         }
 
-        $petFavoritado = PetsFavoritos::create([
+        $petFavoritado = PetFavorito::create([
             'user_id' => $user->id,
             'pet_id' => $pet->id
         ]);

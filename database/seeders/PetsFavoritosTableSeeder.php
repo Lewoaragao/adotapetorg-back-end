@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Pet;
+use App\Models\PetFavorito;
 use Illuminate\Database\Seeder;
 
-class PetsTableSeeder extends Seeder
+class PetsFavoritosTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,6 @@ class PetsTableSeeder extends Seeder
     public function run(): void
     {
         // CRIA 10 PETS ALEATORIOS
-        Pet::factory(30)->create();
+        PetFavorito::factory(10)->create();
     }
 }

@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('pets', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('nome');
             $table->string('raca');
             $table->date('data_nascimento');
             $table->boolean('adotado')->default(0);
             $table->string('imagem')->nullable();
             $table->timestamps();
+
+            // FOREIGN KEY
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
