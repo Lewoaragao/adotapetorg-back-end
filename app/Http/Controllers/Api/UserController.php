@@ -67,15 +67,15 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
+        $userAuth = Auth::user();
         $verificaEmail = User::where('email', $request['email'])->first();
 
-        if ($verificaEmail != null) {
+        if ($verificaEmail != null && $verificaEmail->email != $userAuth->email) {
             return Response(['message' => 'E-mail já cadastrado'], Response::HTTP_CONFLICT);
         }
 
         $data = $request->all();
         $user = User::find($data['id']);
-        $userAuth = Auth::user();
 
         if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $user->id) {
             return Response(['message' => 'Não é possível alterar os dados de outros usuário'], Response::HTTP_FORBIDDEN);
@@ -110,8 +110,9 @@ class UserController extends Controller
             'cidade_endereco' => $request->cidade_endereco,
             'cpf' => $request->cpf,
             'cnpj' => $request->cnpj,
+            'celular' => $request->celular,
             'telefone' => $request->telefone,
-            'telefone_is_whatsapp' => $request->telefone_is_whatsapp,
+            'flg_whatsapp' => $request->flg_whatsapp,
         ]);
 
         return Response($user);

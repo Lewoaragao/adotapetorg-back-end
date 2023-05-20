@@ -34,9 +34,9 @@ class User extends Authenticatable
         'cidade_endereco',
         'cpf',
         'cnpj',
+        'celular',
         'telefone',
-        'telefone_is_whatsapp',
-        'user_tipo',
+        'flg_whatsapp',
     ];
 
     /**

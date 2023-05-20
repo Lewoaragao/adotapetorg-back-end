@@ -29,8 +29,9 @@ return new class extends Migration
             $table->string('cidade_endereco');
             $table->string('cpf')->nullable();
             $table->string('cnpj')->nullable();
+            $table->string('celular');
             $table->string('telefone');
-            $table->boolean('telefone_is_whatsapp')->default(0);
+            $table->boolean('flg_whatsapp')->default(0);
             $table->string('user_tipo')->default("user");
             $table->rememberToken();
             $table->timestamps();

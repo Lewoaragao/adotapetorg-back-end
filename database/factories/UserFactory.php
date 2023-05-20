@@ -32,8 +32,8 @@ class UserFactory extends Factory
             'estado_endereco' => fake()->country(),
             'cidade_endereco' => fake()->city(),
             'cpf' => fake()->numerify('###-###-####'),
+            'celular' => fake()->numerify('###-###-####'),
             'telefone' => fake()->numerify('###-###-####'),
-            'user_tipo' => "user",
         ];
     }
 
