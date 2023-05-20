@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(10);
+        $users = User::paginate(9);
         return Response($users);
     }
 
@@ -32,13 +32,13 @@ class UserController extends Controller
             return Response(['message' => 'E-mail já cadastrado'], Response::HTTP_CONFLICT);
         }
 
-        $caminhoImagem = "imagens/placeholder-user.jpg";
+        $caminhoImagem = "imagens/user/placeholder-user.jpg";
 
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api/imagens/', $nomeImagem);
-            $caminhoImagem = 'imagens/' . $nomeImagem;
+            $imagem->move('api/imagens/user/', $nomeImagem);
+            $caminhoImagem = 'imagens/user/' . $nomeImagem;
         }
 
         $request['senha'] = bcrypt($request['senha']);

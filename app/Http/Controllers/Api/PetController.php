@@ -31,7 +31,7 @@ class PetController extends Controller
      */
     public function index()
     {
-        $pets = Pet::paginate(10);
+        $pets = Pet::paginate(9);
         return Response($pets);
     }
 
@@ -40,13 +40,13 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        $caminhoImagem = "imagens/placeholder-pet.jpg";
+        $caminhoImagem = "imagens/pet/placeholder-pet.jpg";
 
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api/imagens/', $nomeImagem);
-            $caminhoImagem = 'imagens/' . $nomeImagem;
+            $imagem->move('api/imagens/pet/', $nomeImagem);
+            $caminhoImagem = 'imagens/pet/' . $nomeImagem;
         }
 
         $pet = Pet::create([
