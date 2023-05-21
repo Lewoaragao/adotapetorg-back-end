@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public $caminhoImagemUser = '/imagens/user/';
-
     /**
      * @var User
      */
@@ -50,7 +48,7 @@ class UserController extends Controller
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api' . UserController::$caminhoImagemUser, $nomeImagem);
+            $imagem->move('api' . '/imagens/user/', $nomeImagem);
             $caminhoImagem = 'imagens/user/' . $nomeImagem;
         }
 
@@ -105,8 +103,8 @@ class UserController extends Controller
 
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api' . UserController::$caminhoImagemUser, $nomeImagem);
-            $caminhoImagem = UserController::$caminhoImagemUser . $nomeImagem;
+            $imagem->move('api' . '/imagens/user/', $nomeImagem);
+            $caminhoImagem = '/imagens/user/' . $nomeImagem;
         }
 
         $user->update([

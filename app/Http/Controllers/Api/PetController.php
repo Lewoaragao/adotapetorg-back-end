@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Auth;
 
 class PetController extends Controller
 {
-    private $caminhoImagemPet = '/imagens/pet/';
-
     /**
      * @var Pet
      */
@@ -47,8 +45,8 @@ class PetController extends Controller
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api' . PetController::$caminhoImagemPet, $nomeImagem);
-            $caminhoImagem = PetController::$caminhoImagemPet . $nomeImagem;
+            $imagem->move('api' . '/imagens/pet/', $nomeImagem);
+            $caminhoImagem = '/imagens/pet/' . $nomeImagem;
         }
 
         $pet = Pet::create([
@@ -110,8 +108,8 @@ class PetController extends Controller
 
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api' . PetController::$caminhoImagemPet, $nomeImagem);
-            $caminhoImagem = PetController::$caminhoImagemPet . $nomeImagem;
+            $imagem->move('api' . '/imagens/pet/', $nomeImagem);
+            $caminhoImagem = '/imagens/pet/' . $nomeImagem;
         }
 
         $pet->update([

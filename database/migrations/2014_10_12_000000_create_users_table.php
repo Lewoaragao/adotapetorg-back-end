@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('sobrenome');
-            $table->date('data_nascimento');
+            $table->string('sobrenome')->nullable();
+            $table->date('data_nascimento')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('senha');
@@ -29,8 +29,8 @@ return new class extends Migration
             $table->string('cidade_endereco');
             $table->string('cpf')->nullable();
             $table->string('cnpj')->nullable();
-            $table->string('celular');
-            $table->string('telefone');
+            $table->string('celular')->nullable();
+            $table->string('telefone')->nullable();
             $table->boolean('flg_whatsapp')->default(0);
             $table->string('user_tipo')->default("user");
             $table->rememberToken();
