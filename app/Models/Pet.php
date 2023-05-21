@@ -15,7 +15,8 @@ class Pet extends Model
         'nome',
         'raca',
         'data_nascimento',
-        'adotado',
-        'imagem'
+        'flg_adotado',
+        'imagem',
+        'flg_ativo',
     ];
 }

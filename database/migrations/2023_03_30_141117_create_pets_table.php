@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('flg_adotado')->default(0);
             $table->string('imagem')->nullable();
             $table->boolean('flg_ativo')->default(1);
-            $table->boolean('data_adocao')->default(0);
+            $table->date('data_adocao')->nullable();
             $table->timestamps();
 
             // FOREIGN KEY

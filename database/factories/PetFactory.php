@@ -16,13 +16,16 @@ class PetFactory extends Factory
      */
     public function definition(): array
     {
+        $flgAdotado = fake()->boolean();
+
         return [
             'user_id' => fake()->numberBetween(1, 10),
             'nome' => fake()->name(),
             'raca' => fake()->name(),
             'data_nascimento' => fake()->date(),
-            'flg_adotado' => fake()->boolean(),
-            'imagem' => 'imagens/pet/placeholder-pet.jpg'
+            'flg_adotado' => $flgAdotado,
+            'imagem' => 'imagens/pet/placeholder-pet.jpg',
+            'data_adocao' => $flgAdotado ? fake()->date() : null,
         ];
     }
 }
