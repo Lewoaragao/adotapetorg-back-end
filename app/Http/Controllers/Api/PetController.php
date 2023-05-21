@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 
 class PetController extends Controller
 {
+    private $caminhoImagemPet = '/imagens/pet/';
+
     /**
      * @var Pet
      */
@@ -31,8 +33,8 @@ class PetController extends Controller
      */
     public function index()
     {
-        $pets = Pet::paginate(9);
-        return Response($pets);
+        $pets = Pet::paginate(config('constantes.registros_paginacao'));
+        return Response($pets, Response::HTTP_OK);
     }
 
     /**
@@ -45,8 +47,8 @@ class PetController extends Controller
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api/imagens/pet/', $nomeImagem);
-            $caminhoImagem = 'imagens/pet/' . $nomeImagem;
+            $imagem->move('api' . PetController::$caminhoImagemPet, $nomeImagem);
+            $caminhoImagem = PetController::$caminhoImagemPet . $nomeImagem;
         }
 
         $pet = Pet::create([
@@ -108,15 +110,18 @@ class PetController extends Controller
 
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api/imagens/', $nomeImagem);
-            $caminhoImagem = 'imagens/' . $nomeImagem;
+            $imagem->move('api' . PetController::$caminhoImagemPet, $nomeImagem);
+            $caminhoImagem = PetController::$caminhoImagemPet . $nomeImagem;
         }
 
         $pet->update([
             'nome' => $request->nome,
             'raca' => $request->raca,
             'data_nascimento' => $request->data_nascimento,
-            'imagem' => $caminhoImagem
+            'flg_adotado' => $request->flg_adotado,
+            'imagem' => $caminhoImagem,
+            'data_adocao' => $request->data_adocao,
+            'flg_ativo' => $request->flg_ativo,
         ]);
 
         return Response(['message' => 'Pet atualizado com sucesso', 'pet' => $pet], Response::HTTP_OK);
@@ -243,9 +248,9 @@ class PetController extends Controller
 
         $pets = DB::table('pets')
             ->whereIn('id', $listIdPetsFavoritados)
-            ->get();
+            ->paginate(config('constantes.registros_paginacao'));
 
-        return $pets->isEmpty() ?  Response(['message' => 'Nenhum pet favoritado'], Response::HTTP_NOT_FOUND) : Response($pets);
+        return $pets->isEmpty() ? Response(['message' => 'Nenhum pet favoritado'], Response::HTTP_NOT_FOUND) : Response($pets, Response::HTTP_OK);
     }
 
     public function petsCadastradosUser()
@@ -254,10 +259,8 @@ class PetController extends Controller
 
         $pets = DB::table('pets')
             ->where('user_id', $user->id)
-            ->get();
+            ->paginate(config('constantes.registros_paginacao'));
 
-        return $pets->isEmpty()
-            ? Response(['message' => 'Nenhum pet cadastrado'], Response::HTTP_NOT_FOUND)
-            : Response($pets);
+        return $pets->isEmpty() ? Response(['message' => 'Nenhum pet cadastrado'], Response::HTTP_NOT_FOUND) : Response($pets, Response::HTTP_OK);
     }
 }

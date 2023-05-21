@@ -6,19 +6,32 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public $caminhoImagemUser = '/imagens/user/';
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::paginate(9);
-        return Response($users);
+        $users = User::paginate(config('constantes.registros_paginacao'));
+        return Response($users, Response::HTTP_OK);
     }
 
     /**
@@ -37,7 +50,7 @@ class UserController extends Controller
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api/imagens/user/', $nomeImagem);
+            $imagem->move('api' . UserController::$caminhoImagemUser, $nomeImagem);
             $caminhoImagem = 'imagens/user/' . $nomeImagem;
         }
 
@@ -92,8 +105,8 @@ class UserController extends Controller
 
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api/imagens/', $nomeImagem);
-            $caminhoImagem = 'imagens/' . $nomeImagem;
+            $imagem->move('api' . UserController::$caminhoImagemUser, $nomeImagem);
+            $caminhoImagem = UserController::$caminhoImagemUser . $nomeImagem;
         }
 
         $user->update([

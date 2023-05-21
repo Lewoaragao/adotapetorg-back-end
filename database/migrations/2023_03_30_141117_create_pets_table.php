@@ -17,8 +17,10 @@ return new class extends Migration
             $table->string('nome');
             $table->string('raca');
             $table->date('data_nascimento');
-            $table->boolean('adotado')->default(0);
+            $table->boolean('flg_adotado')->default(0);
             $table->string('imagem')->nullable();
+            $table->boolean('flg_ativo')->default(1);
+            $table->boolean('data_adocao')->default(0);
             $table->timestamps();
 
             // FOREIGN KEY
