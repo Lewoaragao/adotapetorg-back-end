@@ -17,8 +17,8 @@ class PetFavoritoFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => fake()->numberBetween(1, 3),
-            'pet_id' => fake()->numberBetween(1, 20),
+            'user_id' => fake()->numberBetween(1, 10),
+            'pet_id' => fake()->numberBetween(1, 10),
             'flg_ativo' => fake()->boolean(),
         ];
     }
