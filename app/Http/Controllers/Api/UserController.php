@@ -52,11 +52,27 @@ class UserController extends Controller
             $caminhoImagem = 'imagens/user/' . $nomeImagem;
         }
 
-        $request['senha'] = bcrypt($request['senha']);
-        $request['imagem'] = $caminhoImagem;
-        $data = $request->all();
-        $user = User::create($data);
-        return Response(['message' => 'Usuário cadastrado com sucesso'], Response::HTTP_OK);
+        $user = User::create([
+            'nome' => $request->nome,
+            'sobrenome' => $request->sobrenome,
+            'data_nascimento' => $request->data_nascimento,
+            'email' => $request->email,
+            'senha' => bcrypt($request->senha),
+            'imagem' => $caminhoImagem,
+            'rua_endereco' => $request->rua_endereco,
+            'numero_endereco' => $request->numero_endereco,
+            'complemento_endereco' => $request->complemento_endereco,
+            'bairro_endereco' => $request->bairro_endereco,
+            'estado_endereco' => $request->estado_endereco,
+            'cidade_endereco' => $request->cidade_endereco,
+            'cpf' => $request->cpf,
+            'cnpj' => $request->cnpj,
+            'celular' => $request->celular,
+            'telefone' => $request->telefone,
+            'flg_whatsapp' => $request->flg_whatsapp,
+        ]);
+
+        return Response(['message' => 'Usuário cadastrado com sucesso', 'user' => $user], Response::HTTP_OK);
     }
 
     /**
@@ -92,18 +108,16 @@ class UserController extends Controller
             return Response(['message' => 'Não é possível alterar os dados de outros usuário'], Response::HTTP_FORBIDDEN);
         }
 
-        $caminhoImagem = "imagens/placeholder-user.jpg";
-
         if ($request->hasFile('imagem')) {
-            $caminhoImagem = 'api/' . $user->imagem;
+            $caminhoImagemAntiga = 'api/' . $user->imagem;
 
-            if (File::exists($caminhoImagem)) {
-                File::delete($caminhoImagem);
+            if (File::exists($caminhoImagemAntiga)) {
+                File::delete($caminhoImagemAntiga);
             }
 
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api' . '/imagens/user/', $nomeImagem);
+            $imagem->move('api/imagens/user/', $nomeImagem);
             $caminhoImagem = '/imagens/user/' . $nomeImagem;
         }
 

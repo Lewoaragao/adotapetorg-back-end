@@ -100,15 +100,15 @@ class PetController extends Controller
         $pet = Pet::find($data['id']);
 
         if ($request->hasFile('imagem')) {
-            $caminhoImagem = 'api/' . $pet->imagem;
+            $caminhoImagemAntiga = 'api/' . $pet->imagem;
 
-            if (File::exists($caminhoImagem)) {
-                File::delete($caminhoImagem);
+            if (File::exists($caminhoImagemAntiga)) {
+                File::delete($caminhoImagemAntiga);
             }
 
             $imagem = $request->file('imagem');
             $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api' . '/imagens/pet/', $nomeImagem);
+            $imagem->move('api/imagens/pet/', $nomeImagem);
             $caminhoImagem = '/imagens/pet/' . $nomeImagem;
         }
 
