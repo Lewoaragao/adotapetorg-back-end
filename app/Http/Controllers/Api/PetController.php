@@ -8,10 +8,10 @@ use App\Models\PetFavorito;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 
 
 class PetController extends Controller
@@ -49,15 +49,20 @@ class PetController extends Controller
             $caminhoImagem = '/imagens/pet/' . $nomeImagem;
         }
 
-        $pet = Pet::create([
+        Pet::create([
             'user_id' => $request->user_id,
             'nome' => $request->nome,
             'raca' => $request->raca,
             'data_nascimento' => $request->data_nascimento,
             'imagem' => $caminhoImagem,
+            'apelido' => $request->apelido,
+            'tamanho' => $request->tamanho,
+            'flg_necessidades_especiais' => $request->flg_necessidades_especiais,
+            'necessidades_especiais' => $request->flg_necessidades_especiais ? $request->necessidades_especiais : null,
+            'sexo' => $request->sexo,
         ]);
 
-        return Response(['message' => 'Pet cadastrado com sucesso', 'pet' => $pet], Response::HTTP_OK);
+        return Response(['message' => 'Pet cadastrado com sucesso'], Response::HTTP_OK);
     }
 
     /**
@@ -94,10 +99,11 @@ class PetController extends Controller
     /**
      * Atualize o recurso especificado no armazenamento.
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $pet = Pet::find($data['id']);
+        $pet = Pet::find($id);
+
+        $caminhoImagem = "imagens/pet/placeholder-pet.jpg";
 
         if ($request->hasFile('imagem')) {
             $caminhoImagemAntiga = 'api/' . $pet->imagem;
@@ -112,6 +118,9 @@ class PetController extends Controller
             $caminhoImagem = '/imagens/pet/' . $nomeImagem;
         }
 
+        // criar pet_cores e as cores da request salvar nela, associado ao pet_id
+        // $cores = $request->cores;
+
         $pet->update([
             'nome' => $request->nome,
             'raca' => $request->raca,
@@ -120,9 +129,14 @@ class PetController extends Controller
             'imagem' => $caminhoImagem,
             'data_adocao' => $request->data_adocao,
             'flg_ativo' => $request->flg_ativo,
+            'apelido' => $request->apelido,
+            'tamanho' => $request->tamanho,
+            'flg_necessidades_especiais' => $request->flg_necessidades_especiais,
+            'necessidades_especiais' => $request->flg_necessidades_especiais ? $request->necessidades_especiais : null,
+            'sexo' => $request->sexo,
         ]);
 
-        return Response(['message' => 'Pet atualizado com sucesso', 'pet' => $pet], Response::HTTP_OK);
+        return Response(['message' => 'Pet atualizado com sucesso'], Response::HTTP_OK);
     }
 
     /**

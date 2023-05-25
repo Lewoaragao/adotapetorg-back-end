@@ -17,6 +17,7 @@ class PetFactory extends Factory
     public function definition(): array
     {
         $flgAdotado = fake()->boolean();
+        $flgNecessidadesEspeciais = fake()->boolean();
 
         return [
             'user_id' => fake()->numberBetween(1, 10),
@@ -26,6 +27,12 @@ class PetFactory extends Factory
             'flg_adotado' => $flgAdotado,
             'imagem' => 'imagens/pet/placeholder-pet.jpg',
             'data_adocao' => $flgAdotado ? fake()->date() : null,
+            'flg_ativo' => fake()->boolean(),
+            'apelido' => fake()->name(),
+            'tamanho' => 'P',
+            'flg_necessidades_especiais' => $flgNecessidadesEspeciais,
+            'necessidades_especiais' => $flgNecessidadesEspeciais ? fake()->text() : null,
+            'sexo' => 'F',
         ];
     }
 }

@@ -17,6 +17,12 @@ class Pet extends Model
         'data_nascimento',
         'flg_adotado',
         'imagem',
+        'data_adocao',
         'flg_ativo',
+        'apelido',
+        'tamanho',
+        'flg_necessidades_especiais',
+        'necessidades_especiais',
+        'sexo',
     ];
 }

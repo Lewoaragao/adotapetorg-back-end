@@ -19,8 +19,13 @@ return new class extends Migration
             $table->date('data_nascimento');
             $table->boolean('flg_adotado')->default(0);
             $table->string('imagem')->nullable();
-            $table->boolean('flg_ativo')->default(1);
             $table->date('data_adocao')->nullable();
+            $table->boolean('flg_ativo')->default(1);
+            $table->string('apelido')->nullable();
+            $table->string('tamanho')->nullable();
+            $table->boolean('flg_necessidades_especiais')->default(0);
+            $table->string('necessidades_especiais')->nullable();
+            $table->string('sexo');
             $table->timestamps();
 
             // FOREIGN KEY

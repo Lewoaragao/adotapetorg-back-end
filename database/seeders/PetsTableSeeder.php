@@ -12,6 +12,9 @@ class PetsTableSeeder extends Seeder
      */
     public function run(): void
     {
+        $flgAdotado = fake()->boolean();
+        $flgNecessidadesEspeciais = fake()->boolean();
+
         // CRIA 10 PETS ALEATORIOS
         Pet::factory(30)->create();
 
@@ -21,8 +24,15 @@ class PetsTableSeeder extends Seeder
             'nome' => fake()->name(),
             'raca' => fake()->name(),
             'data_nascimento' => fake()->date(),
-            'flg_adotado' => fake()->boolean(),
-            'imagem' => 'imagens/pet/placeholder-pet.jpg'
+            'flg_adotado' => $flgAdotado,
+            'imagem' => 'imagens/pet/placeholder-pet.jpg',
+            'data_adocao' => $flgAdotado ? fake()->date() : null,
+            'flg_ativo' => fake()->boolean(),
+            'apelido' => fake()->name(),
+            'tamanho' => 'M',
+            'flg_necessidades_especiais' => $flgNecessidadesEspeciais,
+            'necessidades_especiais' => $flgNecessidadesEspeciais ? fake()->text() : null,
+            'sexo' => 'M',
         ]);
 
         Pet::factory()->create([
@@ -30,8 +40,15 @@ class PetsTableSeeder extends Seeder
             'nome' => fake()->name(),
             'raca' => fake()->name(),
             'data_nascimento' => fake()->date(),
-            'flg_adotado' => fake()->boolean(),
-            'imagem' => 'imagens/pet/placeholder-pet.jpg'
+            'flg_adotado' => $flgAdotado,
+            'imagem' => 'imagens/pet/placeholder-pet.jpg',
+            'data_adocao' => $flgAdotado ? fake()->date() : null,
+            'flg_ativo' => fake()->boolean(),
+            'apelido' => fake()->name(),
+            'tamanho' => 'G',
+            'flg_necessidades_especiais' => $flgNecessidadesEspeciais,
+            'necessidades_especiais' => $flgNecessidadesEspeciais ? fake()->text() : null,
+            'sexo' => 'F',
         ]);
 
         Pet::factory()->create([
@@ -39,8 +56,15 @@ class PetsTableSeeder extends Seeder
             'nome' => fake()->name(),
             'raca' => fake()->name(),
             'data_nascimento' => fake()->date(),
-            'flg_adotado' => fake()->boolean(),
-            'imagem' => 'imagens/pet/placeholder-pet.jpg'
+            'flg_adotado' => $flgAdotado,
+            'imagem' => 'imagens/pet/placeholder-pet.jpg',
+            'data_adocao' => $flgAdotado ? fake()->date() : null,
+            'flg_ativo' => fake()->boolean(),
+            'apelido' => fake()->name(),
+            'tamanho' => 'M',
+            'flg_necessidades_especiais' => $flgNecessidadesEspeciais,
+            'necessidades_especiais' => $flgNecessidadesEspeciais ? fake()->text() : null,
+            'sexo' => 'M',
         ]);
     }
 }
