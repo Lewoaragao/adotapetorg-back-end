@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cor;
 use App\Models\Pet;
+use App\Models\PetCor;
 use App\Models\PetFavorito;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -49,7 +51,8 @@ class PetController extends Controller
             $caminhoImagem = '/imagens/pet/' . $nomeImagem;
         }
 
-        Pet::create([
+
+        $pet = Pet::create([
             'user_id' => $request->user_id,
             'nome' => $request->nome,
             'raca' => $request->raca,
@@ -61,6 +64,10 @@ class PetController extends Controller
             'necessidades_especiais' => $request->flg_necessidades_especiais ? $request->necessidades_especiais : null,
             'sexo' => $request->sexo,
         ]);
+
+        $idCores = $request->cores;
+        $cores = Cor::whereIn('id', $idCores)->get();
+        $pet->cores()->attach($cores);
 
         return Response(['message' => 'Pet cadastrado com sucesso'], Response::HTTP_OK);
     }
@@ -89,8 +96,11 @@ class PetController extends Controller
             $pet_favoritado = true;
         }
 
+        $cores = $pet->cores()->pluck('nome')->all();
+
         return Response([
             'pet' => $pet,
+            'pet_cores' => $cores,
             'user' => $user,
             'pet_favoritado' => $pet_favoritado
         ]);
@@ -118,8 +128,10 @@ class PetController extends Controller
             $caminhoImagem = '/imagens/pet/' . $nomeImagem;
         }
 
-        // criar pet_cores e as cores da request salvar nela, associado ao pet_id
-        // $cores = $request->cores;
+        $pet->cores()->detach(PetCor::where('pet_id', $pet->id)->pluck('cor_id'));
+        $idCores = $request->cores;
+        $cores = Cor::whereIn('id', $idCores)->get();
+        $pet->cores()->attach($cores);
 
         $pet->update([
             'nome' => $request->nome,

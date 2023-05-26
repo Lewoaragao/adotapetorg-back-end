@@ -25,4 +25,9 @@ class Pet extends Model
         'necessidades_especiais',
         'sexo',
     ];
+
+    public function cores()
+    {
+        return $this->belongsToMany(Cor::class, 'pet_cores', 'pet_id', 'cor_id');
+    }
 }

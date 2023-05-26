@@ -1,6 +1,5 @@
 <?php
 return [
-    'registros_paginacao' => 9,
+    'registros_paginacao' => 12,
     'user_tipo' => ['user', 'admin'],
 ]
-?>
