@@ -64,7 +64,7 @@ class LinkController extends Controller
     {
         $user = User::where(['usuario' => $nomeUser])->get()->first();
         $userLinks = $user->links;
-        return $userLinks;
+        return $userLinks->isEmpty() ? Response(['message' => 'Nenhum link cadastrado'], Response::HTTP_NOT_FOUND) : Response($userLinks, Response::HTTP_OK);
     }
 
     public function update(Request $request, $id)
