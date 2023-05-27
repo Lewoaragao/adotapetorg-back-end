@@ -38,6 +38,7 @@ class User extends Authenticatable
         'celular',
         'telefone',
         'flg_whatsapp',
+        'link',
     ];
 
     /**

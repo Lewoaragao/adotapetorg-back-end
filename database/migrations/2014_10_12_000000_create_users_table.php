@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('telefone')->nullable();
             $table->boolean('flg_whatsapp')->default(0);
             $table->string('user_tipo')->default("user");
+            $table->string('link');
             $table->rememberToken();
             $table->timestamps();
         });

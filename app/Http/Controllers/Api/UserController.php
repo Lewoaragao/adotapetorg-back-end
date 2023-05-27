@@ -54,6 +54,7 @@ class UserController extends Controller
         }
 
         $user = User::create([
+            'usuario' => $request->usuario,
             'nome' => $request->nome,
             'sobrenome' => $request->sobrenome,
             'data_nascimento' => $request->data_nascimento,
@@ -71,6 +72,7 @@ class UserController extends Controller
             'celular' => $request->celular,
             'telefone' => $request->telefone,
             'flg_whatsapp' => $request->flg_whatsapp,
+            'link' => 'https://adotapet.org/links/' . $request->usuario
         ]);
 
         return Response(['message' => 'Usuário cadastrado com sucesso', 'user' => $user], Response::HTTP_OK);
@@ -123,6 +125,7 @@ class UserController extends Controller
         }
 
         $user->update([
+            'usuario' => $request->usuario,
             'nome' => $request->nome,
             'sobrenome' => $request->sobrenome,
             'data_nascimento' => $request->data_nascimento,
@@ -139,6 +142,7 @@ class UserController extends Controller
             'celular' => $request->celular,
             'telefone' => $request->telefone,
             'flg_whatsapp' => $request->flg_whatsapp,
+            'link' => 'https://adotapet.org/links' . $request->usuario
         ]);
 
         return Response($user);

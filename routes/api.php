@@ -52,7 +52,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::post('/', 'LinkController@store'); // SALVA UM LINK DO USUÁRIO
         Route::get('/visualizar/{id}', 'LinkController@show'); // MOSTRA UM LINK
         Route::post('/atualizar/{id}', 'LinkController@update'); // ATUALIZA UM LINK DO USUÁRIO
-        Route::delete('/deletar/{id}', 'LinkController@destroy'); // DELETA UM LINK DO USUÁRIO
+        Route::post('/deletar/{id}', 'LinkController@destroy'); // DELETA UM LINK DO USUÁRIO
     });
 
     // ROTAS AUTH

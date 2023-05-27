@@ -17,8 +17,10 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $fakeFirstName = fake()->firstName();
+
         return [
-            'usuario' => fake()->firstName(),
+            'usuario' => $fakeFirstName,
             'nome' => fake()->name(),
             'sobrenome' => fake()->name(),
             'data_nascimento' => fake()->date(),
@@ -35,6 +37,7 @@ class UserFactory extends Factory
             'cpf' => fake()->numerify('###-###-####'),
             'celular' => fake()->numerify('###-###-####'),
             'telefone' => fake()->numerify('###-###-####'),
+            'link' => 'https://adotapet.org/links/' . $fakeFirstName,
         ];
     }
 

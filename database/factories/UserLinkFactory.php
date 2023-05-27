@@ -19,7 +19,7 @@ class UserLinkFactory extends Factory
         return [
             'user_id' => 11,
             'link_tipo_id' => fake()->numberBetween(1, 7),
-            'imagem' => 'imagens/link/placeholder-link.jpg',
+            'imagem' => '',
             'titulo_link' => fake()->name(),
             'link' => 'https://adotapet.org',
         ];

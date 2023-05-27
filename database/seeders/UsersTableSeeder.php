@@ -30,6 +30,7 @@ class UsersTableSeeder extends Seeder
                 'estado_endereco' => 'CE',
                 'cidade_endereco' => 'Fortaleza',
                 'user_tipo' => 'admin',
+                'link' => 'https://adotapet.org/links/lewoaragao'
             ]);
         }
     }
