@@ -30,7 +30,7 @@ class LinkController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $caminhoImagem = "imagens/link/placeholder-link.jpg";
+        $caminhoImagem = "";
 
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
@@ -75,7 +75,7 @@ class LinkController extends Controller
     public function update(Request $request, $id)
     {
         $userLink = UserLink::find($id);
-        $caminhoImagem = "imagens/link/placeholder-link.jpg";
+        $caminhoImagem = "";
 
         if ($request->hasFile('imagem')) {
             $caminhoImagemAntiga = 'api/' . $userLink->imagem;
