@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
         // CRIA UM USER COM DADOS DEFINIDOS
         if (User::where('email', 'lewoaragao@gmail.com')->first() == null) {
             User::factory()->create([
+                'usuario' => 'lewoaragao',
                 'nome' => 'Leonardo',
                 'sobrenome' => 'Aragão',
                 'data_nascimento' => date('1900-01-01'),

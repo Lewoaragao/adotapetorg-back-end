@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $table = 'users';
     protected $fillable = [
+        'usuario',
         'nome',
         'sobrenome',
         'data_nascimento',
@@ -57,4 +58,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function links()
+    {
+        return $this->hasMany(UserLink::class);
+    }
 }

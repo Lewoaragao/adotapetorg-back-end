@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +47,14 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::post('/cadastrados/user', 'PetController@petsCadastradosUser'); // BUSCA OS PETS CADASTRADOS DO USER
     });
 
+    // ROA LINKS
+    Route::prefix('links')->group(function () {
+        Route::post('/', 'LinkController@store'); // SALVA UM LINK DO USUÁRIO
+        Route::get('/visualizar/{id}', 'LinkController@show'); // MOSTRA UM LINK
+        Route::post('/atualizar/{id}', 'LinkController@update'); // ATUALIZA UM LINK DO USUÁRIO
+        Route::delete('/deletar/{id}', 'LinkController@destroy'); // DELETA UM LINK DO USUÁRIO
+    });
+
     // ROTAS AUTH
     Route::get('/user', 'LoginController@userDetails'); // MOSTRA O USUARIO LOGADO
     Route::get('/logout', 'LoginController@logout'); // DESLOGA USUARIO DA SESSAO
@@ -64,6 +72,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
     Route::prefix('pets')->group(function () {
         Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
         Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
+    });
+
+    // ROA LINKS
+    Route::prefix('links')->group(function () {
+        Route::get('/{nomeUser}', 'LinkController@userLinks'); // LISTA TODOS OS LINKS DO USUÁRIO
     });
 
     // ROTA AUTH

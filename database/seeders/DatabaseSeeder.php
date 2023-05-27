@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
             PetsTableSeeder::class,
             PetsFavoritosTableSeeder::class,
             CoresTableSeeder::class,
+            LinkTipoSeeder::class,
+            UserLinkSeeder::class,
         ]);
     }
 }
