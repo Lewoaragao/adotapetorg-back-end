@@ -64,6 +64,11 @@ class LinkController extends Controller
     public function userLinks(string $nomeUser)
     {
         $user = User::where(['usuario' => $nomeUser])->get()->first();
+
+        if ($user == null) {
+            return Response(['message' => 'Nenhum usuário cadastrado com esse nome'], Response::HTTP_NOT_FOUND);
+        }
+
         $userLinks = $user->links;
         $linkTipos = LinkTipo::all();
 
