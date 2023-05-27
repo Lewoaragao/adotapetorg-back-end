@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Models\User;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -32,12 +32,14 @@ class LoginController extends Controller
                 'usuario' => $user
             ], Response::HTTP_OK);
         }
+
         return Response(['message' => 'Email ou senha incorreto'], Response::HTTP_UNAUTHORIZED);
     }
 
     public function userDetails(): Response
     {
         $user = Auth::user();
+
         return Response(['usuario' => $user], Response::HTTP_OK);
     }
 
@@ -45,6 +47,7 @@ class LoginController extends Controller
     {
         $user = Auth::user();
         $user->currentAccessToken()->delete();
+
         return Response(['message' => 'Logout do usuário com sucesso'], Response::HTTP_OK);
     }
 }

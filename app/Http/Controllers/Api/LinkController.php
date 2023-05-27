@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\LinkTipo;
 use App\Models\User;
 use App\Models\UserLink;
 use Illuminate\Http\Request;
@@ -64,7 +65,11 @@ class LinkController extends Controller
     {
         $user = User::where(['usuario' => $nomeUser])->get()->first();
         $userLinks = $user->links;
-        return $userLinks->isEmpty() ? Response(['message' => 'Nenhum link cadastrado'], Response::HTTP_NOT_FOUND) : Response($userLinks, Response::HTTP_OK);
+        $linkTipos = LinkTipo::all();
+
+        return $userLinks->isEmpty()
+            ? Response(['message' => 'Nenhum link cadastrado'], Response::HTTP_NOT_FOUND)
+            : Response(['user_links' => $userLinks, 'link_tipos' => $linkTipos], Response::HTTP_OK);
     }
 
     public function update(Request $request, $id)
@@ -99,6 +104,7 @@ class LinkController extends Controller
     {
         $userLink = UserLink::find($id);
         $userLink->delete();
+
         return Response(['message' => 'Link foi removido com sucesso'], Response::HTTP_OK);
     }
 }

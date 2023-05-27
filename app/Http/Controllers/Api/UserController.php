@@ -29,6 +29,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(config('constantes.registros_paginacao'));
+
         return Response($users, Response::HTTP_OK);
     }
 
@@ -155,6 +156,7 @@ class UserController extends Controller
         }
 
         $user->delete();
+
         return Response(['message' => 'Usuário foi removido com sucesso'], Response::HTTP_OK);
     }
 }

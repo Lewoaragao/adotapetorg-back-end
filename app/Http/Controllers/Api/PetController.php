@@ -158,6 +158,7 @@ class PetController extends Controller
     {
         $pet = Pet::find($id);
         $pet->delete();
+
         return Response(['message' => 'Pet foi removido com sucesso'], Response::HTTP_OK);
     }
 
