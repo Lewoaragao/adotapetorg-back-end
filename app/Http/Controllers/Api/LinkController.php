@@ -46,7 +46,7 @@ class LinkController extends Controller
             'link' => $request->link,
         ]);
 
-        return Response(['message' => 'Link cadastrado com sucesso', 't' => $userLink], Response::HTTP_OK);
+        return Response(['message' => 'Link cadastrado com sucesso'], Response::HTTP_OK);
     }
 
     public function show(string $id)
