@@ -17,7 +17,7 @@ class LinkTipoFactory extends Factory
     public function definition(): array
     {
         return [
-            'nome' => fake()->name(),
+            'tipo' => fake()->name(),
             'flg_ativo' => 1,
         ];
     }

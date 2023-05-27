@@ -11,7 +11,7 @@ class LinkTipo extends Model
 
     protected $table = 'link_tipos';
     protected $fillable = [
-        'nome',
+        'tipo',
         'flg_ativo',
     ];
 }

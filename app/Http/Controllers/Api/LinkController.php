@@ -38,7 +38,7 @@ class LinkController extends Controller
             $caminhoImagem = '/imagens/link/' . $nomeImagem;
         }
 
-        $userLink = UserLink::create([
+        UserLink::create([
             'user_id' => $user->id,
             'link_tipo_id' => $request->link_tipo_id,
             'imagem' => $caminhoImagem,

@@ -13,31 +13,31 @@ class LinkTipoSeeder extends Seeder
     public function run(): void
     {
         LinkTipo::factory()->create([
-            'nome' => 'Externo',
+            'tipo' => 'Externo',
         ]);
 
         LinkTipo::factory()->create([
-            'nome' => 'Instagram',
+            'tipo' => 'Instagram',
         ]);
 
         LinkTipo::factory()->create([
-            'nome' => 'TikTok',
+            'tipo' => 'TikTok',
         ]);
 
         LinkTipo::factory()->create([
-            'nome' => 'LinkedIn',
+            'tipo' => 'LinkedIn',
         ]);
 
         LinkTipo::factory()->create([
-            'nome' => 'GitHub',
+            'tipo' => 'GitHub',
         ]);
 
         LinkTipo::factory()->create([
-            'nome' => 'Facebook',
+            'tipo' => 'Facebook',
         ]);
 
         LinkTipo::factory()->create([
-            'nome' => 'YouTube',
+            'tipo' => 'YouTube',
         ]);
     }
 }
