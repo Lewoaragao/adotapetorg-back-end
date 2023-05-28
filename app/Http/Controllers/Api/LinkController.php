@@ -66,15 +66,15 @@ class LinkController extends Controller
         $user = User::where(['usuario' => $nomeUser])->get()->first();
 
         if ($user == null) {
-            return Response(['message' => 'Nenhum usuário cadastrado com esse nome'], Response::HTTP_NOT_FOUND);
+            return Response(['flg_user_cadastrado' => false, 'message' => 'Nenhum usuário cadastrado com esse nome'], Response::HTTP_NOT_FOUND);
         }
 
         $userLinks = $user->links;
         $linkTipos = LinkTipo::all();
 
         return $userLinks->isEmpty()
-            ? Response(['message' => 'Nenhum link cadastrado'], Response::HTTP_NOT_FOUND)
-            : Response(['user_links' => $userLinks, 'link_tipos' => $linkTipos], Response::HTTP_OK);
+            ? Response(['flg_user_cadastrado' => true, 'user_links' => '', 'message' => 'Nenhum link cadastrado', 'user_imagem' => ''], Response::HTTP_NOT_FOUND)
+            : Response(['flg_user_cadastrado' => true, 'user_links' => $userLinks, 'link_tipos' => $linkTipos, 'user_imagem' => $user->imagem], Response::HTTP_OK);
     }
 
     public function update(Request $request, $id)
