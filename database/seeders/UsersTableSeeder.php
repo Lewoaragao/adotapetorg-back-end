@@ -19,18 +19,14 @@ class UsersTableSeeder extends Seeder
         if (User::where('email', 'lewoaragao@gmail.com')->first() == null) {
             User::factory()->create([
                 'usuario' => 'lewoaragao',
-                'nome' => 'Leonardo',
-                'sobrenome' => 'Aragão',
-                'data_nascimento' => date('1900-01-01'),
+                'primeiro_nome' => 'Leonardo',
                 'email' => 'lewoaragao@gmail.com',
                 'senha' => bcrypt(123),
-                'rua_endereco' => 'Coronel',
-                'numero_endereco' => '1',
-                'bairro_endereco' => 'PK',
-                'estado_endereco' => 'CE',
-                'cidade_endereco' => 'Fortaleza',
                 'user_tipo' => 'admin',
-                'link' => 'https://adotapet.org/links/lewoaragao'
+                'link' => 'https://adotapet.org/links/lewoaragao',
+                'endereco_cidade' => 'Fortaleza',
+                'endereco_estado' => 'Ceará',
+                'endereco_pais' => 'Brasil',
             ]);
         }
     }

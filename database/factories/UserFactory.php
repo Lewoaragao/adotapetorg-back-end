@@ -18,26 +18,24 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $fakeFirstName = fake()->firstName();
+        $flgWhatsapp = fake()->boolean();
 
         return [
             'usuario' => $fakeFirstName,
-            'nome' => fake()->name(),
-            'sobrenome' => fake()->name(),
-            'data_nascimento' => fake()->date(),
+            'primeiro_nome' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'imagem' => 'imagens/user/placeholder-user.jpg',
             'email_verified_at' => now(),
             'senha' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'rua_endereco' => fake()->streetName(),
-            'numero_endereco' => fake()->buildingNumber(),
-            'bairro_endereco' => fake()->streetAddress(),
-            'estado_endereco' => fake()->country(),
-            'cidade_endereco' => fake()->city(),
-            'cpf' => fake()->numerify('###-###-####'),
-            'celular' => fake()->numerify('###-###-####'),
-            'telefone' => fake()->numerify('###-###-####'),
+            'telefone' => fake()->numerify('#########'),
+            'flg_telefone_whatsapp' => $flgWhatsapp ? true : false,
+            'celular' => fake()->numerify('###########'),
+            'flg_celular_whatsapp' => $flgWhatsapp ? false : true,
             'link' => 'https://adotapet.org/links/' . $fakeFirstName,
+            'endereco_cidade' => fake()->city(),
+            'endereco_estado' => fake()->state(),
+            'endereco_pais' => fake()->country(),
         ];
     }
 

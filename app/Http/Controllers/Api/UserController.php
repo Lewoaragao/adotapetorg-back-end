@@ -55,24 +55,18 @@ class UserController extends Controller
 
         $user = User::create([
             'usuario' => $request->usuario,
-            'nome' => $request->nome,
-            'sobrenome' => $request->sobrenome,
-            'data_nascimento' => $request->data_nascimento,
+            'primeiro_nome' => $request->primeiro_nome,
             'email' => $request->email,
             'senha' => bcrypt($request->senha),
             'imagem' => $caminhoImagem,
-            'rua_endereco' => $request->rua_endereco,
-            'numero_endereco' => $request->numero_endereco,
-            'complemento_endereco' => $request->complemento_endereco,
-            'bairro_endereco' => $request->bairro_endereco,
-            'estado_endereco' => $request->estado_endereco,
-            'cidade_endereco' => $request->cidade_endereco,
-            'cpf' => $request->cpf,
-            'cnpj' => $request->cnpj,
-            'celular' => $request->celular,
             'telefone' => $request->telefone,
-            'flg_whatsapp' => $request->flg_whatsapp,
-            'link' => 'https://adotapet.org/links/' . $request->usuario
+            'flg_telefone_whatsapp' => $request->flg_telefone_whatsapp,
+            'celular' => $request->celular,
+            'flg_celular_whatsapp' => $request->flg_celular_whatsapp,
+            'link' => 'https://adotapet.org/links/' . $request->usuario,
+            'endereco_cidade' => $request->endereco_cidade,
+            'endereco_estado' => $request->endereco_estado,
+            'endereco_pais' => $request->endereco_pais,
         ]);
 
         return Response(['message' => 'Usuário cadastrado com sucesso', 'user' => $user], Response::HTTP_OK);
@@ -126,23 +120,19 @@ class UserController extends Controller
 
         $user->update([
             'usuario' => $request->usuario,
-            'nome' => $request->nome,
-            'sobrenome' => $request->sobrenome,
-            'data_nascimento' => $request->data_nascimento,
+            'primeiro_nome' => $request->primeiro_nome,
             'email' => $request->email,
+            'senha' => bcrypt($request->senha),
+            'flg_ativo' => $request->flg_ativo,
             'imagem' => $caminhoImagem,
-            'rua_endereco' => $request->rua_endereco,
-            'numero_endereco' => $request->numero_endereco,
-            'complemento_endereco' => $request->complemento_endereco,
-            'bairro_endereco' => $request->bairro_endereco,
-            'estado_endereco' => $request->estado_endereco,
-            'cidade_endereco' => $request->cidade_endereco,
-            'cpf' => $request->cpf,
-            'cnpj' => $request->cnpj,
-            'celular' => $request->celular,
             'telefone' => $request->telefone,
-            'flg_whatsapp' => $request->flg_whatsapp,
-            'link' => 'https://adotapet.org/links' . $request->usuario
+            'flg_telefone_whatsapp' => $request->flg_telefone_whatsapp,
+            'celular' => $request->celular,
+            'flg_celular_whatsapp' => $request->flg_celular_whatsapp,
+            'link' => 'https://adotapet.org/links/' . $request->usuario,
+            'endereco_cidade' => $request->endereco_cidade,
+            'endereco_estado' => $request->endereco_estado,
+            'endereco_pais' => $request->endereco_pais,
         ]);
 
         return Response($user);

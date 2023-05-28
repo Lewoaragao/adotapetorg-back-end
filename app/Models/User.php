@@ -20,25 +20,19 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $fillable = [
         'usuario',
-        'nome',
-        'sobrenome',
-        'data_nascimento',
+        'primeiro_nome',
         'email',
         'senha',
         'flg_ativo',
         'imagem',
-        'rua_endereco',
-        'numero_endereco',
-        'complemento_endereco',
-        'bairro_endereco',
-        'estado_endereco',
-        'cidade_endereco',
-        'cpf',
-        'cnpj',
-        'celular',
         'telefone',
-        'flg_whatsapp',
+        'flg_telefone_whatsapp',
+        'celular',
+        'flg_celular_whatsapp',
         'link',
+        'endereco_cidade',
+        'endereco_estado',
+        'endereco_pais',
     ];
 
     /**
