@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -42,6 +41,12 @@ class UserController extends Controller
 
         if ($user != null) {
             return Response(['message' => 'E-mail já cadastrado'], Response::HTTP_CONFLICT);
+        }
+
+        $user = User::where('usuario', $request['usuario'])->first();
+
+        if ($user != null) {
+            return Response(['message' => 'Usuário já cadastrado'], Response::HTTP_CONFLICT);
         }
 
         $caminhoImagem = "imagens/user/placeholder-user.jpg";
@@ -92,10 +97,17 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $userAuth = Auth::user();
-        $verificaEmail = User::where('email', $request['email'])->first();
 
-        if ($verificaEmail != null && $verificaEmail->email != $userAuth->email) {
+        $user = User::where('email', $request['email'])->first();
+
+        if ($user != null) {
             return Response(['message' => 'E-mail já cadastrado'], Response::HTTP_CONFLICT);
+        }
+
+        $user = User::where('usuario', $request['usuario'])->first();
+
+        if ($user != null) {
+            return Response(['message' => 'Usuário já cadastrado'], Response::HTTP_CONFLICT);
         }
 
         $data = $request->all();
