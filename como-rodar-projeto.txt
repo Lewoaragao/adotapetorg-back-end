@@ -1,7 +1,8 @@
-Execute os seguintes comandos na ordem:
+Execute os seguintes passos na ordem:
 1 - crie o usuario no MySQL com username root e senha 123456
 2 - crie um banco de dados chamado adotapetorg
 3 - Renomeie o arquivo .env.example para .env
 4 - php composer.phar install
 5 - php artisan migrate
-6 - php artisan config:cache
+6 - php artisan db:seed
+7 - php artisan config:cache
