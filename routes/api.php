@@ -50,7 +50,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
     // ROA LINKS
     Route::prefix('links')->group(function () {
         Route::post('/', 'LinkController@store'); // SALVA UM LINK DO USUÁRIO
-        Route::get('/visualizar/{id}', 'LinkController@show'); // MOSTRA UM LINK
+        Route::post('/visualizar/{id}', 'LinkController@show'); // MOSTRA UM LINK
         Route::post('/atualizar/{id}', 'LinkController@update'); // ATUALIZA UM LINK DO USUÁRIO
         Route::post('/deletar/{id}', 'LinkController@destroy'); // DELETA UM LINK DO USUÁRIO
     });
