@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
                 'email' => 'lewoaragao@gmail.com',
                 'senha' => bcrypt(123),
                 'user_tipo' => 'admin',
-                'link' => 'https://adotapet.org/links/lewoaragao',
+                'link' => config('constantes.url_base_link_bio') . 'lewoaragao',
                 'endereco_cidade' => 'Fortaleza',
                 'endereco_estado' => 'Ceará',
                 'endereco_pais' => 'Brasil',
