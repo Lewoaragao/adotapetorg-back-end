@@ -52,10 +52,15 @@ class LinkController extends Controller
 
     public function show(string $id)
     {
+        $user = Auth::user();
         $userLink = UserLink::find($id);
 
         if ($userLink == null) {
             return Response(['message' => 'Link não encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($userLink->user_id != $user->id) {
+            return Response(['message' => 'Não é possível editar o link de outro usuário'], Response::HTTP_BAD_REQUEST);
         }
 
         return Response($userLink);
