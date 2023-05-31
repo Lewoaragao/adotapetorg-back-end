@@ -87,8 +87,13 @@ class LinkController extends Controller
         $userLink = UserLink::find($id);
         $caminhoImagem = "";
 
+        if ($userLink == null) {
+            return Response(['message' => 'Link não encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
         if ($request->hasFile('imagem')) {
             $caminhoImagemAntiga = 'api/' . $userLink->imagem;
+            return $caminhoImagemAntiga;
 
             if (File::exists($caminhoImagemAntiga)) {
                 File::delete($caminhoImagemAntiga);
