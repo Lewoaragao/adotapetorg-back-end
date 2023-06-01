@@ -93,9 +93,8 @@ class LinkController extends Controller
 
         if ($request->hasFile('imagem')) {
             $caminhoImagemAntiga = 'api/' . $userLink->imagem;
-            return $caminhoImagemAntiga;
 
-            if (File::exists($caminhoImagemAntiga)) {
+            if ($userLink->imagem !== "" && File::exists($caminhoImagemAntiga)) {
                 File::delete($caminhoImagemAntiga);
             }
 
