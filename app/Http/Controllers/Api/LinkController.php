@@ -78,7 +78,7 @@ class LinkController extends Controller
         $linkTipos = LinkTipo::all();
 
         return $userLinks->isEmpty()
-            ? Response(['flg_user_cadastrado' => true, 'link_tipos' => $linkTipos, 'message' => 'Nenhum link cadastrado', 'user_imagem' => ''], Response::HTTP_NOT_FOUND)
+            ? Response(['flg_user_cadastrado' => true, 'link_tipos' => $linkTipos, 'message' => 'Nenhum link cadastrado', 'user_imagem' => $user->imagem], Response::HTTP_NOT_FOUND)
             : Response(['flg_user_cadastrado' => true, 'user_links' => $userLinks, 'link_tipos' => $linkTipos, 'user_imagem' => $user->imagem], Response::HTTP_OK);
     }
 
