@@ -8,6 +8,7 @@ use App\Models\Pet;
 use App\Models\PetCor;
 use App\Models\PetFavorito;
 use App\Models\User;
+use App\Support\Constants;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class PetController extends Controller
      */
     public function index()
     {
-        $pets = Pet::paginate(config('constantes.registros_paginacao'));
+        $pets = Pet::paginate(Constants::REGISTROS_PAGINACAO);
         return Response($pets, Response::HTTP_OK);
     }
 
@@ -273,7 +274,7 @@ class PetController extends Controller
 
         $pets = DB::table('pets')
             ->whereIn('id', $listIdPetsFavoritados)
-            ->paginate(config('constantes.registros_paginacao'));
+            ->paginate(Constants::REGISTROS_PAGINACAO);
 
         return $pets->isEmpty() ? Response(['message' => 'Nenhum pet favoritado'], Response::HTTP_NOT_FOUND) : Response($pets, Response::HTTP_OK);
     }
@@ -284,7 +285,7 @@ class PetController extends Controller
 
         $pets = DB::table('pets')
             ->where('user_id', $user->id)
-            ->paginate(config('constantes.registros_paginacao'));
+            ->paginate(Constants::REGISTROS_PAGINACAO);
 
         return $pets->isEmpty() ? Response(['message' => 'Nenhum pet cadastrado'], Response::HTTP_NOT_FOUND) : Response($pets, Response::HTTP_OK);
     }

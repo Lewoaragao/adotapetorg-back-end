@@ -32,7 +32,7 @@ class UserFactory extends Factory
             'flg_telefone_whatsapp' => $flgWhatsapp ? true : false,
             'celular' => fake()->numerify('###########'),
             'flg_celular_whatsapp' => $flgWhatsapp ? false : true,
-            'link' => config('constantes.url_base_link_bio') . $fakeFirstName,
+            'link' => 'https://adotapet.org/link/' . $fakeFirstName,
             'endereco_cidade' => fake()->city(),
             'endereco_estado' => fake()->state(),
             'endereco_pais' => fake()->country(),

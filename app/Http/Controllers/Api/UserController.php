@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\Constants;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(config('constantes.registros_paginacao'));
+        $users = User::paginate(Constants::REGISTROS_PAGINACAO);
 
         return Response($users, Response::HTTP_OK);
     }
@@ -68,7 +69,7 @@ class UserController extends Controller
             'flg_telefone_whatsapp' => $request->flg_telefone_whatsapp,
             'celular' => $request->celular,
             'flg_celular_whatsapp' => $request->flg_celular_whatsapp,
-            'link' => config('constantes.url_base_link_bio') . $request->usuario,
+            'link' => 'https://adotapet.org/link/' . $request->usuario,
             'endereco_cidade' => $request->endereco_cidade,
             'endereco_estado' => $request->endereco_estado,
             'endereco_pais' => $request->endereco_pais,
@@ -141,7 +142,7 @@ class UserController extends Controller
             'flg_telefone_whatsapp' => $request->flg_telefone_whatsapp,
             'celular' => $request->celular,
             'flg_celular_whatsapp' => $request->flg_celular_whatsapp,
-            'link' => config('constantes.url_base_link_bio') . $request->usuario,
+            'link' => 'https://adotapet.org/link/' . $request->usuario,
             'endereco_cidade' => $request->endereco_cidade,
             'endereco_estado' => $request->endereco_estado,
             'endereco_pais' => $request->endereco_pais,

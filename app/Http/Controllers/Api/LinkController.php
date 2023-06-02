@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LinkTipo;
 use App\Models\User;
 use App\Models\UserLink;
+use App\Support\Constants;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,16 @@ class LinkController extends Controller
     {
         $user = Auth::user();
         $caminhoImagem = "";
+
+        $userLinks = UserLink::where(['user_id' => $user->id])->get();
+
+        foreach ($userLinks as $userLink) {
+            if ($request->link_tipo_id != Constants::LINK_TIPOS['EXTERNO']) {
+                if ($userLink->link_tipo_id == $request->link_tipo_id) {
+                    return Response(['message' => 'Tipo de link já cadastrado'], Response::HTTP_CONFLICT);
+                }
+            }
+        }
 
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
