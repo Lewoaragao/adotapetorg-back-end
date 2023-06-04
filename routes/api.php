@@ -38,6 +38,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
     Route::prefix('pets')->group(function () {
         Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
         Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
+        Route::post('/visualizar/{id}', 'PetController@showPet'); // MOSTRA UM PET
         Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::post('/{id}', 'PetController@update'); // ATUALIZA UM PET
         Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET

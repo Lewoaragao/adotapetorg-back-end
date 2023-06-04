@@ -84,11 +84,38 @@ class PetController extends Controller
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        $user = User::find($pet->user_id);
+        $cores = $pet->cores()->pluck('nome')->all();
+
+        $userCadastrouPet = User::find($pet->user_id);
         $pet_favoritado = false;
 
+        return Response([
+            'pet' => $pet,
+            'pet_cores' => $cores,
+            'user' => $userCadastrouPet,
+            'pet_favoritado' => $pet_favoritado
+        ]);
+    }
+
+    /**
+     * Exiba o recurso especificado autenticado.
+     */
+    public function showPet(string $id)
+    {
+        $pet = Pet::find($id);
+
+        if ($pet == null) {
+            return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        $cores = $pet->cores()->pluck('nome')->all();
+
+        $userCadastrouPet = User::find($pet->user_id);
+        $pet_favoritado = false;
+        $userFavoritouPet = Auth::user();
+
         $is_favorito = DB::table('pets_favoritos')
-            ->where('user_id', $user->id)
+            ->where('user_id', $userFavoritouPet->id)
             ->where('pet_id', $id)
             ->where('flg_ativo', 1)
             ->get();
@@ -97,12 +124,10 @@ class PetController extends Controller
             $pet_favoritado = true;
         }
 
-        $cores = $pet->cores()->pluck('nome')->all();
-
         return Response([
             'pet' => $pet,
             'pet_cores' => $cores,
-            'user' => $user,
+            'user' => $userCadastrouPet,
             'pet_favoritado' => $pet_favoritado
         ]);
     }
