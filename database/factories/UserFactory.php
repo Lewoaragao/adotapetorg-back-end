@@ -23,6 +23,7 @@ class UserFactory extends Factory
         return [
             'usuario' => $fakeFirstName,
             'primeiro_nome' => fake()->name(),
+            'sobrenome' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'imagem' => 'imagens/user/placeholder-user.jpg',
             'email_verified_at' => now(),
