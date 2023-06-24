@@ -61,9 +61,12 @@ class UserController extends Controller
 
         $user = User::create([
             'usuario' => $request->usuario,
+            'is_pessoa' => $request->is_pessoa,
             'primeiro_nome' => $request->primeiro_nome,
-            'email' => $request->email,
             'sobrenome' => $request->sobrenome,
+            'nome_organizacao' => $request->nome_organizacao,
+            'sigla_organizacao' => $request->sigla_organizacao,
+            'email' => $request->email,
             'senha' => bcrypt($request->senha),
             'imagem' => $caminhoImagem,
             'telefone' => $request->telefone,
@@ -134,8 +137,11 @@ class UserController extends Controller
 
         $user->update([
             'usuario' => $request->usuario,
+            'is_pessoa' => $request->is_pessoa,
             'primeiro_nome' => $request->primeiro_nome,
             'sobrenome' => $request->sobrenome,
+            'nome_organizacao' => $request->nome_organizacao,
+            'sigla_organizacao' => $request->sigla_organizacao,
             'email' => $request->email,
             'senha' => bcrypt($request->senha),
             'flg_ativo' => $request->flg_ativo,
