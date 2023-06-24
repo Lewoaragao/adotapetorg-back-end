@@ -63,6 +63,7 @@ class UserController extends Controller
             'usuario' => $request->usuario,
             'primeiro_nome' => $request->primeiro_nome,
             'email' => $request->email,
+            'sobrenome' => $request->sobrenome,
             'senha' => bcrypt($request->senha),
             'imagem' => $caminhoImagem,
             'telefone' => $request->telefone,
@@ -134,6 +135,7 @@ class UserController extends Controller
         $user->update([
             'usuario' => $request->usuario,
             'primeiro_nome' => $request->primeiro_nome,
+            'sobrenome' => $request->sobrenome,
             'email' => $request->email,
             'senha' => bcrypt($request->senha),
             'flg_ativo' => $request->flg_ativo,

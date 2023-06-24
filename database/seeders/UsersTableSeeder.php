@@ -20,6 +20,7 @@ class UsersTableSeeder extends Seeder
             User::factory()->create([
                 'usuario' => 'lewoaragao',
                 'primeiro_nome' => 'Leonardo',
+                'sobrenome' => 'Costa Aragão',
                 'email' => 'lewoaragao@gmail.com',
                 'senha' => bcrypt(123),
                 'user_tipo' => 'admin',
