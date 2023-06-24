@@ -2,7 +2,16 @@ Execute os seguintes passos na ordem:
 1 - crie o usuario no MySQL com username root e senha 123456
 2 - crie um banco de dados chamado adotapetorg
 3 - Renomeie o arquivo .env.example para .env
-4 - php composer.phar install
-5 - php artisan migrate
-6 - php artisan db:seed
-7 - php artisan config:cache
+4 - baixar o composer.phar
+5 - digitar os seguintes comandos no terminal
+6 - php composer.phar install --ignore-platform-req=ext-fileinfo
+7 - php artisan migrate
+
+8 - caso dê o seguinte erro depois de executar o comando anterior
+"could not find driver (Connection: mysql, SQL: select * from information_schema.tables where table_schema = adotapetorg and table_name = migrations and table_type = 'BASE TABLE')"
+lembrar de descomentar a linha
+extension=pdo_mysql
+no arquivo php.ini
+
+8 - php artisan db:seed
+9 - php artisan config:cache
