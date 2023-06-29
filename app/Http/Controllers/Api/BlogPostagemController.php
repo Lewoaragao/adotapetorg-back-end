@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\BlogPostagem;
 use App\Models\BlogPostagemTag;
 use App\Models\BlogTag;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -17,17 +16,9 @@ class BlogPostagemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function indexPostagens()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return BlogPostagem::all();
     }
 
     /**
@@ -75,9 +66,14 @@ class BlogPostagemController extends Controller
     public function storePostagem(Request $request)
     {
         $valida_titulo = BlogPostagem::where('titulo', $request->titulo)->first();
+        $valida_subtitulo = BlogPostagem::where('subtitulo', $request->subtitulo)->first();
 
         if ($valida_titulo != null) {
             return Response(['message' => 'Título já cadastrado'], Response::HTTP_CONFLICT);
+        }
+
+        if ($valida_subtitulo != null) {
+            return Response(['message' => 'Subtítulo já cadastrado'], Response::HTTP_CONFLICT);
         }
 
         $userAuth = Auth::user();
@@ -91,7 +87,7 @@ class BlogPostagemController extends Controller
             $caminhoImagem = 'imagens/blog/' . $nomeImagem;
         }
 
-        BlogPostagem::create([
+        $postagem = BlogPostagem::create([
             'user_id' => $userAuth->id,
             'titulo' => $request->titulo,
             'subtitulo' => $request->subtitulo,
@@ -99,6 +95,10 @@ class BlogPostagemController extends Controller
             'slug' => $slug,
             'imagem' => $caminhoImagem,
         ]);
+
+        $idTags = $request->tags;
+        $tags = BlogTag::whereIn('id', $idTags)->get();
+        $postagem->tags()->attach($tags);
 
         return Response(['message' => 'Postagem criada com sucesso'], Response::HTTP_OK);
     }
@@ -145,8 +145,6 @@ class BlogPostagemController extends Controller
                 'list_tags_com_erro' => $list_tags_com_erro
             ]
         ], Response::HTTP_OK);
-
-
     }
 
     /**
@@ -154,19 +152,17 @@ class BlogPostagemController extends Controller
      */
     public function showPostagemTag(string $slug)
     {
-        $postagem = BlogPostagem::where('id', 1)->first();
-        $autor = User::where('id', $postagem->user_id)->get();
-        $postagemTags = BlogPostagemTag::where('blog_postagens_id', $postagem->id)->pluck('blog_tags_id');
-        $tags = BlogTag::whereIn('id', $postagemTags)->where('flg_ativo', 1)->get();
-        return Response(['postagem' => $postagem, 'autor' => $autor, 'tags' => $tags], Response::HTTP_OK);
-    }
+        $postagem = BlogPostagem::where('slug', $slug)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        if($postagem == null) {
+            return Response(['message' => 'Postagem não encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        return Response([
+            'postagem' => $postagem,
+            'autor' => $postagem->autor()->pluck('primeiro_nome')->first() . ' ' . $postagem->autor()->pluck('sobrenome')->first(),
+            'tags' => $postagem->tags()->get()
+        ], Response::HTTP_OK);
     }
 
     /**

@@ -57,7 +57,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
 
     // ROTA BLOG
     Route::prefix('blog')->group(function () {
-        Route::get('/cadastrar/tag', 'BlogPostagemController@storeTag'); // SALVA UMA TAG DO BLOG
+        Route::post('/cadastrar/tag', 'BlogPostagemController@storeTag'); // SALVA UMA TAG DO BLOG
         Route::post('/cadastrar/postagem', 'BlogPostagemController@storePostagem'); // SALVA UMA POSTAGEM DO BLOG
         Route::post('/cadastrar/postagem/tag', 'BlogPostagemController@storePostagemTag'); // SALVA VÁRIAS TAGS DA POSTAGEM DO BLOG
     });
@@ -88,6 +88,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
 
     // ROTA BLOG
     Route::prefix('blog')->group(function () {
+        Route::get('/todas/postagens', 'BlogPostagemController@indexPostagens'); // SALVA UMA TAG DO BLOG
         Route::get('/{slug}', 'BlogPostagemController@showPostagemTag'); // MOSTRA UMA POSTAGEM
     });
 

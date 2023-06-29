@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             CoresTableSeeder::class,
             LinkTipoSeeder::class,
             UserLinkSeeder::class,
+            BlogTagSeeder::class,
+            BlogPostagemSeeder::class,
         ]);
     }
 }
