@@ -59,6 +59,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
     Route::prefix('blog')->group(function () {
         Route::post('/cadastrar/tag', 'BlogPostagemController@storeTag'); // SALVA UMA TAG DO BLOG
         Route::post('/cadastrar/postagem', 'BlogPostagemController@storePostagem'); // SALVA UMA POSTAGEM DO BLOG
+        Route::post('/atualizar/postagem/{id}', 'BlogPostagemController@updatePostagem'); // SALVA UMA POSTAGEM DO BLOG
         Route::post('/cadastrar/postagem/tag', 'BlogPostagemController@storePostagemTag'); // SALVA VÁRIAS TAGS DA POSTAGEM DO BLOG
     });
 

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class BlogPostagemController extends Controller
 {
@@ -168,9 +169,52 @@ class BlogPostagemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updatePostagem(Request $request, string $id)
     {
-        //
+        $valida_titulo = BlogPostagem::where('titulo', $request->titulo)->first();
+        $valida_subtitulo = BlogPostagem::where('subtitulo', $request->subtitulo)->first();
+
+        if ($valida_titulo != null) {
+            return Response(['message' => 'Título já cadastrado'], Response::HTTP_CONFLICT);
+        }
+
+        if ($valida_subtitulo != null) {
+            return Response(['message' => 'Subtítulo já cadastrado'], Response::HTTP_CONFLICT);
+        }
+        
+        $postagem = BlogPostagem::find($id);
+
+        $caminhoImagem = "imagens/blog/placeholder-blog.jpg";
+
+        if ($request->hasFile('imagem')) {
+            $caminhoImagemAntiga = 'api/' . $postagem->imagem;
+
+            if (File::exists($caminhoImagemAntiga)) {
+                File::delete($caminhoImagemAntiga);
+            }
+
+            $imagem = $request->file('imagem');
+            $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
+            $imagem->move('api/imagens/blog/', $nomeImagem);
+            $caminhoImagem = '/imagens/blog/' . $nomeImagem;
+        }
+
+        $slug = Str::slug($request->titulo);
+
+        $postagem->update([
+            'titulo' => $request->titulo,
+            'subtitulo' => $request->subtitulo,
+            'conteudo' => $request->conteudo,
+            'slug' => $slug,
+            'imagem' => $caminhoImagem,
+        ]);
+
+        $postagem->tags()->detach(BlogPostagemTag::where('blog_postagens_id', $postagem->id)->pluck('blog_tags_id'));
+        $idTags = $request->tags;
+        $tags = BlogTag::whereIn('id', $idTags)->get();
+        $postagem->tags()->attach($tags);
+
+        return Response(['message' => 'Postagem atualizada com sucesso'], Response::HTTP_OK);
     }
 
     /**
