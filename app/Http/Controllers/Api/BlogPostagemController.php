@@ -205,6 +205,7 @@ class BlogPostagemController extends Controller
             'titulo' => $request->titulo,
             'subtitulo' => $request->subtitulo,
             'conteudo' => $request->conteudo,
+            'flg_ativo' => $request->flg_ativo,
             'slug' => $slug,
             'imagem' => $caminhoImagem,
         ]);
