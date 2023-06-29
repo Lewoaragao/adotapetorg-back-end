@@ -37,7 +37,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
     // ROTA PETS
     Route::prefix('pets')->group(function () {
         Route::get('/', 'PetController@index'); // LISTA TODOS OS PET
-        Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
         Route::post('/visualizar/{id}', 'PetController@showPet'); // MOSTRA UM PET
         Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::post('/{id}', 'PetController@update'); // ATUALIZA UM PET
@@ -48,12 +47,20 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::post('/cadastrados/user', 'PetController@petsCadastradosUser'); // BUSCA OS PETS CADASTRADOS DO USER
     });
 
-    // ROA LINKS
+    // ROTA LINKS
     Route::prefix('links')->group(function () {
         Route::post('/', 'LinkController@store'); // SALVA UM LINK DO USUÁRIO
         Route::post('/visualizar/{id}', 'LinkController@show'); // MOSTRA UM LINK
         Route::post('/atualizar/{id}', 'LinkController@update'); // ATUALIZA UM LINK DO USUÁRIO
         Route::post('/deletar/{id}', 'LinkController@destroy'); // DELETA UM LINK DO USUÁRIO
+    });
+
+    // ROTA BLOG
+    Route::prefix('blog')->group(function () {
+        Route::post('/cadastrar/tag', 'BlogPostagemController@storeTag'); // SALVA UMA TAG DO BLOG
+        Route::post('/cadastrar/postagem', 'BlogPostagemController@storePostagem'); // SALVA UMA POSTAGEM DO BLOG
+        Route::post('/atualizar/postagem/{id}', 'BlogPostagemController@updatePostagem'); // SALVA UMA POSTAGEM DO BLOG
+        Route::post('/cadastrar/postagem/tag', 'BlogPostagemController@storePostagemTag'); // SALVA VÁRIAS TAGS DA POSTAGEM DO BLOG
     });
 
     // ROTAS AUTH
@@ -75,9 +82,15 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::get('/{id}', 'PetController@show'); // MOSTRA UM PET
     });
 
-    // ROA LINKS
+    // ROTA LINKS
     Route::prefix('links')->group(function () {
         Route::get('/{nomeUser}', 'LinkController@userLinks'); // LISTA TODOS OS LINKS DO USUÁRIO
+    });
+
+    // ROTA BLOG
+    Route::prefix('blog')->group(function () {
+        Route::get('/todas/postagens', 'BlogPostagemController@indexPostagens'); // SALVA UMA TAG DO BLOG
+        Route::get('/{slug}', 'BlogPostagemController@showPostagemTag'); // MOSTRA UMA POSTAGEM
     });
 
     // ROTA AUTH
