@@ -57,10 +57,15 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
 
     // ROTA BLOG
     Route::prefix('blog')->group(function () {
+        Route::post('/{slug}', 'BlogPostagemController@showPostagemTagUserAuth'); // MOSTRA UMA POSTAGEM
         Route::post('/cadastrar/tag', 'BlogPostagemController@storeTag'); // SALVA UMA TAG DO BLOG
         Route::post('/cadastrar/postagem', 'BlogPostagemController@storePostagem'); // SALVA UMA POSTAGEM DO BLOG
         Route::post('/atualizar/postagem/{id}', 'BlogPostagemController@updatePostagem'); // SALVA UMA POSTAGEM DO BLOG
         Route::post('/cadastrar/postagem/tag', 'BlogPostagemController@storePostagemTag'); // SALVA VÁRIAS TAGS DA POSTAGEM DO BLOG
+        Route::post('/{id}/favoritar', 'BlogPostagemController@favoritarPostagem'); // FAVORITA UMA POSTAGEM
+        Route::post('/{id}/desfavoritar', 'BlogPostagemController@desfavoritarPostagem'); // DESFAVORITA UMA POSTAGEM
+        Route::post('/postagens/favoritas/user', 'BlogPostagemController@postagensFavoritasUser'); // BUSCA AS POSTAGENS FAVORITAS DO USER
+        Route::post('/postagens/cadastradas/user', 'BlogPostagemController@postagensCadastradasUser'); // BUSCA AS POSTAGENS CADASTRADAS DO USER
     });
 
     // ROTAS AUTH
