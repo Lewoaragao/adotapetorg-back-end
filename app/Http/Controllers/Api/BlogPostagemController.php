@@ -11,9 +11,9 @@ use App\Support\Constants;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class BlogPostagemController extends Controller
 {
@@ -101,9 +101,11 @@ class BlogPostagemController extends Controller
             'imagem' => $caminhoImagem,
         ]);
 
-        $idTags = $request->tags;
-        $tags = BlogTag::whereIn('id', $idTags)->get();
-        $postagem->tags()->attach($tags);
+        if(!empty($request->tags)) {
+            $idTags = $request->tags;
+            $tags = BlogTag::whereIn('id', $idTags)->get();
+            $postagem->tags()->attach($tags);
+        }
 
         return Response(['message' => 'Postagem criada com sucesso'], Response::HTTP_OK);
     }
@@ -217,7 +219,7 @@ class BlogPostagemController extends Controller
         if ($valida_subtitulo != null) {
             return Response(['message' => 'Subtítulo já cadastrado'], Response::HTTP_CONFLICT);
         }
-        
+
         $postagem = BlogPostagem::find($id);
 
         $caminhoImagem = "imagens/blog/placeholder-blog.jpg";
@@ -335,7 +337,7 @@ class BlogPostagemController extends Controller
         return Response(['message' => 'Postagem foi favoritada com sucesso', 'postagem' => $postagemFavoritada], Response::HTTP_OK);
 
     }
-    
+
     public function desfavoritarPostagem(string $id) {
         $postagem = BlogPostagem::find($id);
         $user = Auth::user();
@@ -348,7 +350,7 @@ class BlogPostagemController extends Controller
         ->where('user_id', $user->id)
         ->where('blog_postagem_id', $id)
         ->pluck('blog_postagem_id');
-        
+
         $postagemDesfavoritadoIsAtivo = DB::table('blog_postagens_favoritas')
             ->where('user_id', $user->id)
             ->where('blog_postagem_id', $id)
@@ -363,13 +365,13 @@ class BlogPostagemController extends Controller
                         ->where('user_id', $user->id)
                         ->where('blog_postagem_id', $id)
                         ->update(['flg_ativo' => 0]);
-    
+
                     $postagemDesfavoritada = DB::table('blog_postagens_favoritas')
                         ->where('user_id', $user->id)
                         ->where('blog_postagem_id', $id)
                         ->get()
                         ->first();
-    
+
                     return Response(['message' => 'Postagem foi desfavoritada com sucesso', 'postagem' => $postagemDesfavoritada], Response::HTTP_OK);
                 }
             }
