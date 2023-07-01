@@ -66,6 +66,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::post('/{id}/desfavoritar', 'BlogPostagemController@desfavoritarPostagem'); // DESFAVORITA UMA POSTAGEM
         Route::post('/postagens/favoritas/user', 'BlogPostagemController@postagensFavoritasUser'); // BUSCA AS POSTAGENS FAVORITAS DO USER
         Route::post('/postagens/cadastradas/user', 'BlogPostagemController@postagensCadastradasUser'); // BUSCA AS POSTAGENS CADASTRADAS DO USER
+        Route::post('/deletar/{id}', 'BlogPostagemController@destroyPostagem'); // DELETA UMA POSTAGEM DO USUÁRIO
     });
 
     // ROTAS AUTH

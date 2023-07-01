@@ -101,9 +101,9 @@ class BlogPostagemController extends Controller
             'imagem' => $caminhoImagem,
         ]);
 
-        if(!empty($request->tags)) {
-            $idTags = $request->tags;
-            $tags = BlogTag::whereIn('id', $idTags)->get();
+        if($request->tags !== null && !empty($request->tags)) {
+            $tags = $request->tags;
+            $tags = BlogTag::whereIn('tag', $tags)->get();
             $postagem->tags()->attach($tags);
         }
 
@@ -249,8 +249,8 @@ class BlogPostagemController extends Controller
         ]);
 
         $postagem->tags()->detach(BlogPostagemTag::where('blog_postagens_id', $postagem->id)->pluck('blog_tags_id'));
-        $idTags = $request->tags;
-        $tags = BlogTag::whereIn('id', $idTags)->get();
+        $tags = $request->tags;
+        $tags = BlogTag::whereIn('tag', $tags)->get();
         $postagem->tags()->attach($tags);
 
         return Response(['message' => 'Postagem atualizada com sucesso'], Response::HTTP_OK);
@@ -259,9 +259,39 @@ class BlogPostagemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroyPostagem(string $id)
     {
-        //
+        $postagem = BlogPostagem::find($id);
+        $userAuth = Auth::user();
+
+        if($postagem == null) {
+            return Response(['message' => 'Postagem não encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $postagem->user_id) {
+            return Response(['message' => 'Não é possível alterar a postagem de outro usuário'], Response::HTTP_FORBIDDEN);
+        }
+
+        $tags = BlogPostagemTag::where('blog_postagens_id', $id);
+
+        if(!empty($tags)) {
+            BlogPostagemTag::where('blog_postagens_id', $id)->delete();
+        }
+
+        $favoritada = BlogPostagemFavorita::where('blog_postagem_id', $id);
+
+        if($favoritada !== null) {
+            BlogPostagemFavorita::where('blog_postagem_id', $id)->delete();
+        }
+
+        $caminhoImagemPostagem = 'api/' . $postagem->imagem;
+        if ($caminhoImagemPostagem !== "api/imagens/blog/placeholder-blog.jpg" && File::exists($caminhoImagemPostagem)) {
+            File::delete($caminhoImagemPostagem);
+        }
+        $postagem->delete();
+
+        return Response(['message' => 'Postagem foi removida com sucesso'], Response::HTTP_OK);
+
     }
 
     public function postagensCadastradasUser()
@@ -272,7 +302,11 @@ class BlogPostagemController extends Controller
             ->where('user_id', $user->id)
             ->paginate(Constants::REGISTROS_PAGINACAO);
 
-        return $postagens->isEmpty() ? Response(['message' => 'Nenhuma postagem cadastrada'], Response::HTTP_NOT_FOUND) : Response($postagens, Response::HTTP_OK);
+        $tags = BlogTag::all();
+
+        return $postagens->isEmpty()
+        ? Response(['message' => 'Nenhuma postagem cadastrada'], Response::HTTP_NOT_FOUND)
+        : Response(['postagens' => $postagens, 'tags' => $tags], Response::HTTP_OK);
     }
 
     public function postagensFavoritasUser()
