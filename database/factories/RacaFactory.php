@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Cor>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Raca>
  */
-class CorFactory extends Factory
+class RacaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,7 @@ class CorFactory extends Factory
     public function definition(): array
     {
         return [
-            'cor' => fake()->safeColorName(),
-            'flg_ativo' => fake()->boolean(),
+            'raca' => fake()->name(),
         ];
     }
 }

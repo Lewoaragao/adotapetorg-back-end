@@ -11,7 +11,7 @@ class Cor extends Model
 
     protected $table = 'cores';
     protected $fillable = [
-        'nome',
+        'cor',
         'flg_ativo',
     ];
 

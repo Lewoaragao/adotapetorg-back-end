@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cores', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
+            $table->string('cor');
             $table->boolean('flg_ativo')->default(1);
             $table->timestamps();
         });

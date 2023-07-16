@@ -22,7 +22,6 @@ class PetFactory extends Factory
         return [
             'user_id' => fake()->numberBetween(1, 10),
             'nome' => fake()->name(),
-            'raca' => fake()->name(),
             'data_nascimento' => fake()->date(),
             'flg_adotado' => $flgAdotado,
             'imagem' => 'imagens/pet/placeholder-pet.jpg',
