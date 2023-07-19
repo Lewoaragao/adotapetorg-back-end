@@ -296,7 +296,7 @@ class BlogPostagemController extends Controller
         $tags = BlogTag::all();
 
         return $postagens->isEmpty()
-            ? Response(['message' => 'Nenhuma postagem cadastrada'], Response::HTTP_NOT_FOUND)
+            ? Response(['message' => 'Nenhuma postagem cadastrada', 'tags' => $tags], Response::HTTP_NOT_FOUND)
             : Response(['postagens' => $postagens, 'tags' => $tags], Response::HTTP_OK);
     }
 
