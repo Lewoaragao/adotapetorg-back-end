@@ -15,9 +15,12 @@ class BlogTagSeeder extends Seeder
         $tags = ['Pet', 'Amor', 'Adoção', 'Cachorro', 'Gato', 'Cuidados'];
 
         foreach ($tags as $tag) {
+            // $validaTag = BlogTag::where('tag', $tag);
+            // if ($validaTag == null) {
             BlogTag::create([
                 'tag' => $tag
             ]);
+            // }
         }
     }
 }

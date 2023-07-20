@@ -58,10 +58,11 @@ class PetController extends Controller
 
         $pet = Pet::create([
             'user_id' => $user->id,
-            'nome' => $request->nome,
+            'pet_tipos_id' => $request->pet_tipos_id,
             'raca_id' => $request->raca_id,
-            'data_nascimento' => $request->data_nascimento,
             'imagem' => $caminhoImagem,
+            'nome' => $request->nome,
+            'data_nascimento' => $request->data_nascimento,
             'apelido' => $request->apelido,
             'tamanho' => $request->tamanho,
             'flg_necessidades_especiais' => $request->flg_necessidades_especiais,
@@ -240,7 +241,10 @@ class PetController extends Controller
                     ->get()
                     ->first();
 
-                return Response(['message' => 'Pet foi favoritado com sucesso', 'pet' => $petFavoritado], Response::HTTP_OK);
+                return Response([
+                    'message' => 'Pet foi favoritado com sucesso',
+                    'pet' => $petFavoritado
+                ], Response::HTTP_OK);
             }
         }
 
@@ -287,7 +291,10 @@ class PetController extends Controller
                     ->get()
                     ->first();
 
-                return Response(['message' => 'Pet foi desfavoritado com sucesso', 'pet' => $petDesfavoritado], Response::HTTP_OK);
+                return Response([
+                    'message' => 'Pet foi desfavoritado com sucesso',
+                    'pet' => $petDesfavoritado
+                ], Response::HTTP_OK);
             }
         }
 
@@ -302,7 +309,10 @@ class PetController extends Controller
             ->get()
             ->first();
 
-        return Response(['message' => 'Pet foi desfavoritado com sucesso', 'pet' => $petDesfavoritado], Response::HTTP_OK);
+        return Response([
+            'message' => 'Pet foi desfavoritado com sucesso',
+            'pet' => $petDesfavoritado
+        ], Response::HTTP_OK);
     }
 
     public function petsFavoritosUser()
@@ -318,7 +328,9 @@ class PetController extends Controller
             ->whereIn('id', $listIdPetsFavoritados)
             ->paginate(Constants::REGISTROS_PAGINACAO);
 
-        return $pets->isEmpty() ? Response(['message' => 'Nenhum pet favoritado'], Response::HTTP_NOT_FOUND) : Response($pets, Response::HTTP_OK);
+        return $pets->isEmpty()
+            ? Response(['message' => 'Nenhum pet favoritado'], Response::HTTP_NOT_FOUND)
+            : Response($pets, Response::HTTP_OK);
     }
 
     public function petsCadastradosUser()
@@ -330,17 +342,18 @@ class PetController extends Controller
             ->paginate(Constants::REGISTROS_PAGINACAO);
 
         $tipos = PetTipo::all();
+        $cores = Cor::all();
 
         return $pets->isEmpty()
             ? Response([
                 'message' => 'Nenhum pet cadastrado',
                 'tipos' => $tipos,
-                'racas' => null
+                'cores' => $cores,
             ], Response::HTTP_NOT_FOUND)
             : Response([
                 'pets' => $pets,
                 'tipos' => $tipos,
-                'racas' => null
+                'cores' => $cores,
             ], Response::HTTP_OK);
     }
 
