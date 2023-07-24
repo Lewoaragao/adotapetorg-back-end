@@ -1,0 +1,1 @@
+Essa pasta é para ser colocada na public do projeto back-end.
