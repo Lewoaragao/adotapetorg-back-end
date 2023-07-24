@@ -11,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blog_postagens', function (Blueprint $table) {
+        Schema::create('blog_postagens_favoritas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('titulo')->unique();
-            $table->string('subtitulo');
-            $table->text('conteudo');
-            $table->string('slug')->unique();
+            $table->unsignedBigInteger('blog_postagem_id');
             $table->boolean('flg_ativo')->default(1);
-            $table->string('imagem');
             $table->timestamps();
 
             // FOREIGN KEY
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('blog_postagem_id')->references('id')->on('blog_postagens');
         });
     }
 
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blog_postagens');
+        Schema::dropIfExists('blog_postagens_favoritas');
     }
 };

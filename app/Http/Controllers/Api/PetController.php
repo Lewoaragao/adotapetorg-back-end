@@ -7,6 +7,8 @@ use App\Models\Cor;
 use App\Models\Pet;
 use App\Models\PetCor;
 use App\Models\PetFavorito;
+use App\Models\PetTipo;
+use App\Models\Raca;
 use App\Models\User;
 use App\Support\Constants;
 use Illuminate\Http\Request;
@@ -52,13 +54,15 @@ class PetController extends Controller
             $caminhoImagem = '/imagens/pet/' . $nomeImagem;
         }
 
+        $user = Auth::user();
 
         $pet = Pet::create([
-            'user_id' => $request->user_id,
-            'nome' => $request->nome,
-            'raca' => $request->raca,
-            'data_nascimento' => $request->data_nascimento,
+            'user_id' => $user->id,
+            'pet_tipos_id' => $request->pet_tipos_id,
+            'raca_id' => $request->raca_id,
             'imagem' => $caminhoImagem,
+            'nome' => $request->nome,
+            'data_nascimento' => $request->data_nascimento,
             'apelido' => $request->apelido,
             'tamanho' => $request->tamanho,
             'flg_necessidades_especiais' => $request->flg_necessidades_especiais,
@@ -66,8 +70,8 @@ class PetController extends Controller
             'sexo' => $request->sexo,
         ]);
 
-        $idCores = $request->cores;
-        $cores = Cor::whereIn('id', $idCores)->get();
+        $cores = $request->cores;
+        $cores = Cor::whereIn('cor', $cores)->get();
         $pet->cores()->attach($cores);
 
         return Response(['message' => 'Pet cadastrado com sucesso'], Response::HTTP_OK);
@@ -84,7 +88,7 @@ class PetController extends Controller
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        $cores = $pet->cores()->pluck('nome')->all();
+        $cores = $pet->cores()->pluck('cor')->all();
 
         $userCadastrouPet = User::find($pet->user_id);
         $pet_favoritado = false;
@@ -108,7 +112,7 @@ class PetController extends Controller
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        $cores = $pet->cores()->pluck('nome')->all();
+        $cores = $pet->cores()->pluck('cor')->all();
 
         $userCadastrouPet = User::find($pet->user_id);
         $pet_favoritado = false;
@@ -139,6 +143,10 @@ class PetController extends Controller
     {
         $pet = Pet::find($id);
 
+        if ($pet == null) {
+            return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
         $caminhoImagem = "imagens/pet/placeholder-pet.jpg";
 
         if ($request->hasFile('imagem')) {
@@ -155,13 +163,16 @@ class PetController extends Controller
         }
 
         $pet->cores()->detach(PetCor::where('pet_id', $pet->id)->pluck('cor_id'));
-        $idCores = $request->cores;
-        $cores = Cor::whereIn('id', $idCores)->get();
-        $pet->cores()->attach($cores);
+
+        if ($request->cores != null) {
+            $cores = $request->cores;
+            $cores = Cor::whereIn('cor', $cores)->get();
+            $pet->cores()->attach($cores);
+        }
 
         $pet->update([
             'nome' => $request->nome,
-            'raca' => $request->raca,
+            'raca_id' => $request->raca_id,
             'data_nascimento' => $request->data_nascimento,
             'flg_adotado' => $request->flg_adotado,
             'imagem' => $caminhoImagem,
@@ -183,6 +194,13 @@ class PetController extends Controller
     public function destroy(string $id)
     {
         $pet = Pet::find($id);
+        $pet->cores()->detach(PetCor::where('pet_id', $pet->id)->pluck('cor_id'));
+
+        $caminhoImagemPostagem = 'api/' . $pet->imagem;
+        if ($caminhoImagemPostagem !== "api/imagens/pet/placeholder-pet.jpg" && File::exists($caminhoImagemPostagem)) {
+            File::delete($caminhoImagemPostagem);
+        }
+
         $pet->delete();
 
         return Response(['message' => 'Pet foi removido com sucesso'], Response::HTTP_OK);
@@ -223,7 +241,10 @@ class PetController extends Controller
                     ->get()
                     ->first();
 
-                return Response(['message' => 'Pet foi favoritado com sucesso', 'pet' => $petFavoritado], Response::HTTP_OK);
+                return Response([
+                    'message' => 'Pet foi favoritado com sucesso',
+                    'pet' => $petFavoritado
+                ], Response::HTTP_OK);
             }
         }
 
@@ -270,7 +291,10 @@ class PetController extends Controller
                     ->get()
                     ->first();
 
-                return Response(['message' => 'Pet foi desfavoritado com sucesso', 'pet' => $petDesfavoritado], Response::HTTP_OK);
+                return Response([
+                    'message' => 'Pet foi desfavoritado com sucesso',
+                    'pet' => $petDesfavoritado
+                ], Response::HTTP_OK);
             }
         }
 
@@ -285,7 +309,10 @@ class PetController extends Controller
             ->get()
             ->first();
 
-        return Response(['message' => 'Pet foi desfavoritado com sucesso', 'pet' => $petDesfavoritado], Response::HTTP_OK);
+        return Response([
+            'message' => 'Pet foi desfavoritado com sucesso',
+            'pet' => $petDesfavoritado
+        ], Response::HTTP_OK);
     }
 
     public function petsFavoritosUser()
@@ -301,17 +328,37 @@ class PetController extends Controller
             ->whereIn('id', $listIdPetsFavoritados)
             ->paginate(Constants::REGISTROS_PAGINACAO);
 
-        return $pets->isEmpty() ? Response(['message' => 'Nenhum pet favoritado'], Response::HTTP_NOT_FOUND) : Response($pets, Response::HTTP_OK);
+        return $pets->isEmpty()
+            ? Response(['message' => 'Nenhum pet favoritado'], Response::HTTP_NOT_FOUND)
+            : Response($pets, Response::HTTP_OK);
     }
 
     public function petsCadastradosUser()
     {
         $user = Auth::user();
 
-        $pets = DB::table('pets')
+        $pets = Pet::with('cores')
             ->where('user_id', $user->id)
             ->paginate(Constants::REGISTROS_PAGINACAO);
 
-        return $pets->isEmpty() ? Response(['message' => 'Nenhum pet cadastrado'], Response::HTTP_NOT_FOUND) : Response($pets, Response::HTTP_OK);
+        $tipos = PetTipo::all();
+        $cores = Cor::all();
+
+        return $pets->isEmpty()
+            ? Response([
+                'message' => 'Nenhum pet cadastrado',
+                'tipos' => $tipos,
+                'cores' => $cores,
+            ], Response::HTTP_NOT_FOUND)
+            : Response([
+                'pets' => $pets,
+                'tipos' => $tipos,
+                'cores' => $cores,
+            ], Response::HTTP_OK);
+    }
+
+    public function racasPetTipoId(string $id)
+    {
+        return Response(Raca::where('pet_tipos_id', $id)->get(), Response::HTTP_OK);
     }
 }

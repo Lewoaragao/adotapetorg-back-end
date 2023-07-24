@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('nome');
-            $table->string('raca');
+            $table->unsignedBigInteger('pet_tipos_id')->default(1);
+            $table->unsignedBigInteger('raca_id')->default(1);
             $table->date('data_nascimento');
             $table->boolean('flg_adotado')->default(0);
             $table->string('imagem')->nullable();
@@ -30,6 +31,8 @@ return new class extends Migration
 
             // FOREIGN KEY
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('raca_id')->references('id')->on('racas');
+            $table->foreign('pet_tipos_id')->references('id')->on('pet_tipos');
         });
     }
 

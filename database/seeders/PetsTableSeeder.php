@@ -18,11 +18,11 @@ class PetsTableSeeder extends Seeder
         // CRIA 10 PETS ALEATORIOS
         Pet::factory(30)->create();
 
-        // CRIA 3 PETS PARA O USUARIO COM ID 11
+        // CRIA 3 PETS PARA O USUARIO COM ID 11 lewoaragao@gmail.com
         Pet::factory()->create([
             'user_id' => 11,
             'nome' => fake()->name(),
-            'raca' => fake()->name(),
+            'raca_id' => 2,
             'data_nascimento' => fake()->date(),
             'flg_adotado' => $flgAdotado,
             'imagem' => 'imagens/pet/placeholder-pet.jpg',
@@ -38,7 +38,7 @@ class PetsTableSeeder extends Seeder
         Pet::factory()->create([
             'user_id' => 11,
             'nome' => fake()->name(),
-            'raca' => fake()->name(),
+            'raca_id' => 3,
             'data_nascimento' => fake()->date(),
             'flg_adotado' => $flgAdotado,
             'imagem' => 'imagens/pet/placeholder-pet.jpg',
@@ -54,7 +54,7 @@ class PetsTableSeeder extends Seeder
         Pet::factory()->create([
             'user_id' => 11,
             'nome' => fake()->name(),
-            'raca' => fake()->name(),
+            'raca_id' => 4,
             'data_nascimento' => fake()->date(),
             'flg_adotado' => $flgAdotado,
             'imagem' => 'imagens/pet/placeholder-pet.jpg',

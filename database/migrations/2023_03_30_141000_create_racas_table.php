@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blog_tags', function (Blueprint $table) {
+        Schema::create('racas', function (Blueprint $table) {
             $table->id();
-            $table->string('tag')->unique();
+            $table->unsignedBigInteger('pet_tipos_id')->default(1);
+            $table->string('raca');
             $table->timestamps();
+
+            // FOREIGN KEY
+            $table->foreign('pet_tipos_id')->references('id')->on('pet_tipos');
         });
     }
 
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blog_tags');
+        Schema::dropIfExists('racas');
     }
 };

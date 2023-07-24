@@ -128,6 +128,12 @@ class LinkController extends Controller
     public function destroy(string $id)
     {
         $userLink = UserLink::find($id);
+
+        $caminhoImagemPostagem = 'api/' . $userLink->imagem;
+        if ($caminhoImagemPostagem !== "api/imagens/link/placeholder-link.jpg" && File::exists($caminhoImagemPostagem)) {
+            File::delete($caminhoImagemPostagem);
+        }
+
         $userLink->delete();
 
         return Response(['message' => 'Link foi removido com sucesso'], Response::HTTP_OK);

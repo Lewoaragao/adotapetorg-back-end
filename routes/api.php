@@ -40,11 +40,12 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::post('/visualizar/{id}', 'PetController@showPet'); // MOSTRA UM PET
         Route::post('/', 'PetController@store'); // SALVA UM PET
         Route::post('/{id}', 'PetController@update'); // ATUALIZA UM PET
-        Route::delete('/{id}', 'PetController@destroy'); // DELETA UM PET
+        Route::post('/deletar/{id}', 'PetController@destroy'); // DELETA UM PET
         Route::post('/{id}/favoritar', 'PetController@favoritar'); // FAVORITA UM PET
         Route::post('/{id}/desfavoritar', 'PetController@desfavoritar'); // DESFAVORITA UM PET
         Route::post('/favoritos/user', 'PetController@petsFavoritosUser'); // BUSCA OS PETS FAVORITOS DO USER
         Route::post('/cadastrados/user', 'PetController@petsCadastradosUser'); // BUSCA OS PETS CADASTRADOS DO USER
+        Route::post('/racas/{id}', 'PetController@racasPetTipoId'); // BUSCA AS RAÇAS DO TIPO DE PET SELECIONADO
     });
 
     // ROTA LINKS
@@ -57,10 +58,16 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
 
     // ROTA BLOG
     Route::prefix('blog')->group(function () {
+        Route::post('/{slug}', 'BlogPostagemController@showPostagemTagUserAuth'); // MOSTRA UMA POSTAGEM
         Route::post('/cadastrar/tag', 'BlogPostagemController@storeTag'); // SALVA UMA TAG DO BLOG
         Route::post('/cadastrar/postagem', 'BlogPostagemController@storePostagem'); // SALVA UMA POSTAGEM DO BLOG
         Route::post('/atualizar/postagem/{id}', 'BlogPostagemController@updatePostagem'); // SALVA UMA POSTAGEM DO BLOG
         Route::post('/cadastrar/postagem/tag', 'BlogPostagemController@storePostagemTag'); // SALVA VÁRIAS TAGS DA POSTAGEM DO BLOG
+        Route::post('/{id}/favoritar', 'BlogPostagemController@favoritarPostagem'); // FAVORITA UMA POSTAGEM
+        Route::post('/{id}/desfavoritar', 'BlogPostagemController@desfavoritarPostagem'); // DESFAVORITA UMA POSTAGEM
+        Route::post('/postagens/favoritas/user', 'BlogPostagemController@postagensFavoritasUser'); // BUSCA AS POSTAGENS FAVORITAS DO USER
+        Route::post('/postagens/cadastradas/user', 'BlogPostagemController@postagensCadastradasUser'); // BUSCA AS POSTAGENS CADASTRADAS DO USER
+        Route::post('/deletar/{id}', 'BlogPostagemController@destroyPostagem'); // DELETA UMA POSTAGEM DO USUÁRIO
     });
 
     // ROTAS AUTH

@@ -5,18 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cor extends Model
+class BlogPostagemFavorita extends Model
 {
     use HasFactory;
 
-    protected $table = 'cores';
+    protected $table = 'blog_postagens_favoritas';
     protected $fillable = [
-        'cor',
+        'user_id',
+        'blog_postagem_id',
         'flg_ativo',
     ];
-
-    public function pets()
-    {
-        return $this->belongsToMany(Pet::class, 'pet_cores', 'cor_id', 'pet_id');
-    }
 }

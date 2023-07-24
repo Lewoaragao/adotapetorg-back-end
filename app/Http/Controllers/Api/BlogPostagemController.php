@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPostagem;
+use App\Models\BlogPostagemFavorita;
 use App\Models\BlogPostagemTag;
 use App\Models\BlogTag;
+use App\Support\Constants;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class BlogPostagemController extends Controller
 {
@@ -19,7 +22,8 @@ class BlogPostagemController extends Controller
      */
     public function indexPostagens()
     {
-        return BlogPostagem::all();
+        $postagens = BlogPostagem::paginate(Constants::REGISTROS_PAGINACAO);
+        return Response($postagens, Response::HTTP_OK);
     }
 
     /**
@@ -67,14 +71,9 @@ class BlogPostagemController extends Controller
     public function storePostagem(Request $request)
     {
         $valida_titulo = BlogPostagem::where('titulo', $request->titulo)->first();
-        $valida_subtitulo = BlogPostagem::where('subtitulo', $request->subtitulo)->first();
 
         if ($valida_titulo != null) {
             return Response(['message' => 'Título já cadastrado'], Response::HTTP_CONFLICT);
-        }
-
-        if ($valida_subtitulo != null) {
-            return Response(['message' => 'Subtítulo já cadastrado'], Response::HTTP_CONFLICT);
         }
 
         $userAuth = Auth::user();
@@ -97,9 +96,11 @@ class BlogPostagemController extends Controller
             'imagem' => $caminhoImagem,
         ]);
 
-        $idTags = $request->tags;
-        $tags = BlogTag::whereIn('id', $idTags)->get();
-        $postagem->tags()->attach($tags);
+        if ($request->tags !== null && !empty($request->tags)) {
+            $tags = $request->tags;
+            $tags = BlogTag::whereIn('tag', $tags)->get();
+            $postagem->tags()->attach($tags);
+        }
 
         return Response(['message' => 'Postagem criada com sucesso'], Response::HTTP_OK);
     }
@@ -155,14 +156,46 @@ class BlogPostagemController extends Controller
     {
         $postagem = BlogPostagem::where('slug', $slug)->first();
 
-        if($postagem == null) {
+        if ($postagem == null) {
             return Response(['message' => 'Postagem não encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        $postagem_favoritada = false;
+
+        return Response([
+            'postagem' => $postagem,
+            'autor' => $postagem->autor()->pluck('primeiro_nome')->first() . ' ' . $postagem->autor()->pluck('sobrenome')->first(),
+            'tags' => $postagem->tags()->get(),
+            'postagem_favoritada' => $postagem_favoritada
+        ], Response::HTTP_OK);
+    }
+
+    public function showPostagemTagUserAuth(string $slug)
+    {
+        $postagem = BlogPostagem::where('slug', $slug)->first();
+
+        if ($postagem == null) {
+            return Response(['message' => 'Postagem não encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        $postagem_favoritada = false;
+        $userFavoritouPostagem = Auth::user();
+
+        $is_favorito = DB::table('blog_postagens_favoritas')
+            ->where('user_id', $userFavoritouPostagem->id)
+            ->where('blog_postagem_id', $postagem->id)
+            ->where('flg_ativo', 1)
+            ->get();
+
+        if (!$is_favorito->isEmpty()) {
+            $postagem_favoritada = true;
         }
 
         return Response([
             'postagem' => $postagem,
             'autor' => $postagem->autor()->pluck('primeiro_nome')->first() . ' ' . $postagem->autor()->pluck('sobrenome')->first(),
-            'tags' => $postagem->tags()->get()
+            'tags' => $postagem->tags()->get(),
+            'postagem_favoritada' => $postagem_favoritada
         ], Response::HTTP_OK);
     }
 
@@ -171,17 +204,12 @@ class BlogPostagemController extends Controller
      */
     public function updatePostagem(Request $request, string $id)
     {
-        $valida_titulo = BlogPostagem::where('titulo', $request->titulo)->first();
-        $valida_subtitulo = BlogPostagem::where('subtitulo', $request->subtitulo)->first();
+        $valida_request = BlogPostagem::where('titulo', $request->titulo)->first();
 
-        if ($valida_titulo != null) {
+        if ($valida_request != null && $valida_request->id != $id) {
             return Response(['message' => 'Título já cadastrado'], Response::HTTP_CONFLICT);
         }
 
-        if ($valida_subtitulo != null) {
-            return Response(['message' => 'Subtítulo já cadastrado'], Response::HTTP_CONFLICT);
-        }
-        
         $postagem = BlogPostagem::find($id);
 
         $caminhoImagem = "imagens/blog/placeholder-blog.jpg";
@@ -205,15 +233,16 @@ class BlogPostagemController extends Controller
             'titulo' => $request->titulo,
             'subtitulo' => $request->subtitulo,
             'conteudo' => $request->conteudo,
-            'flg_ativo' => $request->flg_ativo,
             'slug' => $slug,
             'imagem' => $caminhoImagem,
         ]);
 
-        $postagem->tags()->detach(BlogPostagemTag::where('blog_postagens_id', $postagem->id)->pluck('blog_tags_id'));
-        $idTags = $request->tags;
-        $tags = BlogTag::whereIn('id', $idTags)->get();
-        $postagem->tags()->attach($tags);
+        if ($request->tags != null) {
+            $postagem->tags()->detach(BlogPostagemTag::where('blog_postagens_id', $postagem->id)->pluck('blog_tags_id'));
+            $tags = $request->tags;
+            $tags = BlogTag::whereIn('tag', $tags)->get();
+            $postagem->tags()->attach($tags);
+        }
 
         return Response(['message' => 'Postagem atualizada com sucesso'], Response::HTTP_OK);
     }
@@ -221,8 +250,169 @@ class BlogPostagemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroyPostagem(string $id)
     {
-        //
+        $postagem = BlogPostagem::find($id);
+        $userAuth = Auth::user();
+
+        if ($postagem == null) {
+            return Response(['message' => 'Postagem não encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $postagem->user_id) {
+            return Response(['message' => 'Não é possível alterar a postagem de outro usuário'], Response::HTTP_FORBIDDEN);
+        }
+
+        $tags = BlogPostagemTag::where('blog_postagens_id', $id);
+
+        if (!empty($tags)) {
+            BlogPostagemTag::where('blog_postagens_id', $id)->delete();
+        }
+
+        $favoritada = BlogPostagemFavorita::where('blog_postagem_id', $id);
+
+        if ($favoritada !== null) {
+            BlogPostagemFavorita::where('blog_postagem_id', $id)->delete();
+        }
+
+        $caminhoImagemPostagem = 'api/' . $postagem->imagem;
+        if ($caminhoImagemPostagem !== "api/imagens/blog/placeholder-blog.jpg" && File::exists($caminhoImagemPostagem)) {
+            File::delete($caminhoImagemPostagem);
+        }
+
+        $postagem->delete();
+
+        return Response(['message' => 'Postagem removida com sucesso'], Response::HTTP_OK);
+    }
+
+    public function postagensCadastradasUser()
+    {
+        $user = Auth::user();
+
+        $postagens = BlogPostagem::where('user_id', $user->id)
+            ->with('tags')
+            ->paginate(Constants::REGISTROS_PAGINACAO);
+
+        $tags = BlogTag::all();
+
+        return $postagens->isEmpty()
+            ? Response(['message' => 'Nenhuma postagem cadastrada', 'tags' => $tags], Response::HTTP_NOT_FOUND)
+            : Response(['postagens' => $postagens, 'tags' => $tags], Response::HTTP_OK);
+    }
+
+    public function postagensFavoritasUser()
+    {
+        $user = Auth::user();
+
+        $listIdPostagensFavoritadas = DB::table('blog_postagens_favoritas')
+            ->where('user_id', $user->id)
+            ->where('flg_ativo', 1)
+            ->pluck('blog_postagem_id');
+
+        $postagens = DB::table('blog_postagens')
+            ->whereIn('id', $listIdPostagensFavoritadas)
+            ->paginate(Constants::REGISTROS_PAGINACAO);
+
+        return $postagens->isEmpty() ? Response(['message' => 'Nenhuma postagem favoritada'], Response::HTTP_NOT_FOUND) : Response($postagens, Response::HTTP_OK);
+    }
+
+    public function favoritarPostagem(string $id)
+    {
+        $postagem = BlogPostagem::find($id);
+        $user = Auth::user();
+
+        if ($postagem == null) {
+            return Response(['message' => 'Postagem não encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        $listIdPostagensFavoritadas = DB::table('blog_postagens_favoritas')
+            ->where('user_id', $user->id)
+            ->where('blog_postagem_id', $id)
+            ->pluck('blog_postagem_id');
+
+        $postagemFavoritadoIsAtivo = DB::table('blog_postagens_favoritas')
+            ->where('user_id', $user->id)
+            ->where('blog_postagem_id', $id)
+            ->get()
+            ->first();
+
+        if ($listIdPostagensFavoritadas->contains($id)) {
+            if ($postagemFavoritadoIsAtivo->flg_ativo == 1) {
+                return Response(['message' => 'Postagem já favoritada'], Response::HTTP_CONFLICT);
+            } else {
+                DB::table('blog_postagens_favoritas')
+                    ->where('user_id', $user->id)
+                    ->where('blog_postagem_id', $id)
+                    ->update(['flg_ativo' => 1]);
+
+                $postagemFavoritada = DB::table('blog_postagens_favoritas')
+                    ->where('user_id', $user->id)
+                    ->where('blog_postagem_id', $id)
+                    ->get()
+                    ->first();
+
+                return Response(['message' => 'Postagem favoritada com sucesso', 'postagem' => $postagemFavoritada], Response::HTTP_OK);
+            }
+        }
+
+        $postagemFavoritada = BlogPostagemFavorita::create([
+            'user_id' => $user->id,
+            'blog_postagem_id' => $postagem->id
+        ]);
+
+        return Response(['message' => 'Postagem favoritada com sucesso', 'postagem' => $postagemFavoritada], Response::HTTP_OK);
+    }
+
+    public function desfavoritarPostagem(string $id)
+    {
+        $postagem = BlogPostagem::find($id);
+        $user = Auth::user();
+
+        if ($postagem == null) {
+            return Response(['message' => 'Postagem não encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        $listIdPostagensFavoritadas = DB::table('blog_postagens_favoritas')
+            ->where('user_id', $user->id)
+            ->where('blog_postagem_id', $id)
+            ->pluck('blog_postagem_id');
+
+        $postagemDesfavoritadoIsAtivo = DB::table('blog_postagens_favoritas')
+            ->where('user_id', $user->id)
+            ->where('blog_postagem_id', $id)
+            ->get()
+            ->first();
+
+        if ($listIdPostagensFavoritadas->contains($id)) {
+            if ($postagemDesfavoritadoIsAtivo->flg_ativo == 0) {
+                return Response(['message' => 'Postagem já desfavoritada'], Response::HTTP_CONFLICT);
+            } else {
+                DB::table('blog_postagens_favoritas')
+                    ->where('user_id', $user->id)
+                    ->where('blog_postagem_id', $id)
+                    ->update(['flg_ativo' => 0]);
+
+                $postagemDesfavoritada = DB::table('blog_postagens_favoritas')
+                    ->where('user_id', $user->id)
+                    ->where('blog_postagem_id', $id)
+                    ->get()
+                    ->first();
+
+                return Response(['message' => 'Postagem desfavoritada com sucesso', 'postagem' => $postagemDesfavoritada], Response::HTTP_OK);
+            }
+        }
+
+        DB::table('blog_postagens_favoritas')
+            ->where('user_id', $user->id)
+            ->where('blog_postagem_id', $id)
+            ->update(['flg_ativo' => 0]);
+
+        $postagemDesfavoritada = DB::table('blog_postagens_favoritas')
+            ->where('user_id', $user->id)
+            ->where('blog_postagem_id', $id)
+            ->get()
+            ->first();
+
+        return Response(['message' => 'Postagem desfavoritada com sucesso', 'postagem' => $postagemDesfavoritada], Response::HTTP_OK);
     }
 }

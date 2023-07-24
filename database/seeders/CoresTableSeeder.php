@@ -12,7 +12,15 @@ class CoresTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // CRIA 10 CORES ALEATORIAS
-        Cor::factory(10)->create();
+        $cores = ['Caramelo', 'Branco', 'Preto', 'Marrom', 'Cinza'];
+
+        foreach ($cores as $cor) {
+            // $validaCor = Cor::where('cor', $cor);
+            // if ($validaCor == null) {
+            Cor::create([
+                'cor' => $cor,
+            ]);
+            // }
+        }
     }
 }

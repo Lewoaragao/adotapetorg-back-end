@@ -119,7 +119,7 @@ class UserController extends Controller
         $user = User::find($data['id']);
 
         if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $user->id) {
-            return Response(['message' => 'Não é possível alterar os dados de outros usuário'], Response::HTTP_FORBIDDEN);
+            return Response(['message' => 'Não é possível alterar os dados de outro usuário'], Response::HTTP_FORBIDDEN);
         }
 
         if ($request->hasFile('imagem')) {
