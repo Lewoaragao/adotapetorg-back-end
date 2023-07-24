@@ -70,8 +70,8 @@ class PetController extends Controller
             'sexo' => $request->sexo,
         ]);
 
-        $idCores = $request->cores;
-        $cores = Cor::whereIn('id', $idCores)->get();
+        $cores = $request->cores;
+        $cores = Cor::whereIn('cor', $cores)->get();
         $pet->cores()->attach($cores);
 
         return Response(['message' => 'Pet cadastrado com sucesso'], Response::HTTP_OK);
@@ -165,8 +165,8 @@ class PetController extends Controller
         $pet->cores()->detach(PetCor::where('pet_id', $pet->id)->pluck('cor_id'));
 
         if ($request->cores != null) {
-            $idCores = $request->cores;
-            $cores = Cor::whereIn('id', $idCores)->get();
+            $cores = $request->cores;
+            $cores = Cor::whereIn('cor', $cores)->get();
             $pet->cores()->attach($cores);
         }
 
@@ -337,7 +337,7 @@ class PetController extends Controller
     {
         $user = Auth::user();
 
-        $pets = DB::table('pets')
+        $pets = Pet::with('cores')
             ->where('user_id', $user->id)
             ->paginate(Constants::REGISTROS_PAGINACAO);
 
