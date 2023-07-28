@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\Constants;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +46,7 @@ class LoginController extends Controller
     {
         $loginExternoTipo = $request->login_externo_tipo;
 
-        if($loginExternoTipo == Constants::LOGIN_EXTERNO_TIPO['GOOGLE']) {
+        if ($loginExternoTipo == Constants::LOGIN_EXTERNO_TIPO['GOOGLE']) {
 
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
@@ -65,7 +66,7 @@ class LoginController extends Controller
                     'usuario' => $user
                 ], Response::HTTP_OK);
             }
-        } elseif($loginExternoTipo == Constants::LOGIN_EXTERNO_TIPO['FACEBOOK']) {
+        } elseif ($loginExternoTipo == Constants::LOGIN_EXTERNO_TIPO['FACEBOOK']) {
 
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
@@ -85,7 +86,7 @@ class LoginController extends Controller
                     'usuario' => $user
                 ], Response::HTTP_OK);
             }
-        } elseif($loginExternoTipo == Constants::LOGIN_EXTERNO_TIPO['GITHUB']) {
+        } elseif ($loginExternoTipo == Constants::LOGIN_EXTERNO_TIPO['GITHUB']) {
 
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
