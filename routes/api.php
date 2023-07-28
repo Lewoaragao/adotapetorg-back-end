@@ -102,4 +102,5 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
 
     // ROTA AUTH
     Route::post('/login', 'LoginController@loginUser'); // LOGA USUARIO NA SESSAO
+    Route::post('/login', 'LoginController@loginUserExterno'); // LOGA USUARIO NA SESSAO APÓS AUTENTICAÇÃO EXTERNA: GOOGLE, FACEBOOK, GITHUB...
 });

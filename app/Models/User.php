@@ -37,6 +37,9 @@ class User extends Authenticatable
         'endereco_cidade',
         'endereco_estado',
         'endereco_pais',
+        'google_id',
+        'facebook_id',
+        'github_id',
     ];
 
     /**

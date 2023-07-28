@@ -36,10 +36,8 @@ class LinkController extends Controller
         $userLinks = UserLink::where(['user_id' => $user->id])->get();
 
         foreach ($userLinks as $userLink) {
-            if ($request->link_tipo_id != Constants::LINK_TIPOS['EXTERNO']) {
-                if ($userLink->link_tipo_id == $request->link_tipo_id) {
-                    return Response(['message' => 'Tipo de link já cadastrado'], Response::HTTP_CONFLICT);
-                }
+            if ($request->link_tipo_id != Constants::LINK_TIPO['EXTERNO'] && $userLink->link_tipo_id == $request->link_tipo_id) {
+                return Response(['message' => 'Tipo de link já cadastrado'], Response::HTTP_CONFLICT);
             }
         }
 
