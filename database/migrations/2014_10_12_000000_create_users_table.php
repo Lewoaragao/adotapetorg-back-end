@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('nome_organizacao')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('senha');
+            $table->string('senha')->nullable();
             $table->boolean('flg_ativo')->default(1);
             $table->string('imagem')->nullable();
             $table->string('telefone')->nullable();
@@ -30,9 +30,12 @@ return new class extends Migration
             $table->boolean('flg_celular_whatsapp')->default(0);
             $table->string('user_tipo')->default("user");
             $table->string('link');
-            $table->string('endereco_cidade');
-            $table->string('endereco_estado');
-            $table->string('endereco_pais');
+            $table->string('endereco_cidade')->nullable();
+            $table->string('endereco_estado')->nullable();
+            $table->string('endereco_pais')->nullable();
+            $table->string('google_id')->unique()->nullable();
+            $table->string('facebook_id')->unique()->nullable();
+            $table->string('github_id')->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
