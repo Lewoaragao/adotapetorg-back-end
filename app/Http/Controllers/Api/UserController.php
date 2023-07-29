@@ -29,7 +29,6 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(Constants::REGISTROS_PAGINACAO);
-
         return Response($users, Response::HTTP_OK);
     }
 
@@ -59,24 +58,21 @@ class UserController extends Controller
             $caminhoImagem = 'imagens/user/' . $nomeImagem;
         }
 
+        if ($request->imagem_perfil_externo !== null) {
+            $caminhoImagem = $request->imagem_perfil_externo;
+        }
+
         $user = User::create([
             'usuario' => $request->usuario,
-            'is_pessoa' => $request->is_pessoa,
             'primeiro_nome' => $request->primeiro_nome,
             'sobrenome' => $request->sobrenome,
-            'nome_organizacao' => $request->nome_organizacao,
-            'sigla_organizacao' => $request->sigla_organizacao,
             'email' => $request->email,
             'senha' => bcrypt($request->senha),
             'imagem' => $caminhoImagem,
-            'telefone' => $request->telefone,
-            'flg_telefone_whatsapp' => $request->flg_telefone_whatsapp,
-            'celular' => $request->celular,
-            'flg_celular_whatsapp' => $request->flg_celular_whatsapp,
             'link' => 'https://adotapet.org/link/' . $request->usuario,
-            'endereco_cidade' => $request->endereco_cidade,
-            'endereco_estado' => $request->endereco_estado,
-            'endereco_pais' => $request->endereco_pais,
+            'google_id' => $request->google_id == null ? null : bcrypt($request->google_id),
+            'facebook_id' => $request->facebook_id == null ? null : bcrypt($request->facebook_id),
+            'github_id' => $request->github_id == null ? null : bcrypt($request->github_id),
         ]);
 
         return Response(['message' => 'Usuário cadastrado com sucesso', 'user' => $user], Response::HTTP_OK);

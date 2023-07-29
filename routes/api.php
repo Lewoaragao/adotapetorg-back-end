@@ -62,12 +62,14 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::post('/cadastrar/tag', 'BlogPostagemController@storeTag'); // SALVA UMA TAG DO BLOG
         Route::post('/cadastrar/postagem', 'BlogPostagemController@storePostagem'); // SALVA UMA POSTAGEM DO BLOG
         Route::post('/atualizar/postagem/{id}', 'BlogPostagemController@updatePostagem'); // SALVA UMA POSTAGEM DO BLOG
+        Route::post('/atualizar/imagem/{id}', 'BlogPostagemController@updateImagemPostagem'); // ATUALIZAR UMA IMAGEM DE POSTAGEM DO BLOG
         Route::post('/cadastrar/postagem/tag', 'BlogPostagemController@storePostagemTag'); // SALVA VÁRIAS TAGS DA POSTAGEM DO BLOG
         Route::post('/{id}/favoritar', 'BlogPostagemController@favoritarPostagem'); // FAVORITA UMA POSTAGEM
         Route::post('/{id}/desfavoritar', 'BlogPostagemController@desfavoritarPostagem'); // DESFAVORITA UMA POSTAGEM
         Route::post('/postagens/favoritas/user', 'BlogPostagemController@postagensFavoritasUser'); // BUSCA AS POSTAGENS FAVORITAS DO USER
         Route::post('/postagens/cadastradas/user', 'BlogPostagemController@postagensCadastradasUser'); // BUSCA AS POSTAGENS CADASTRADAS DO USER
         Route::post('/deletar/{id}', 'BlogPostagemController@destroyPostagem'); // DELETA UMA POSTAGEM DO USUÁRIO
+        Route::post('/deletar/imagem/{id}', 'BlogPostagemController@destroyImagemPostagem'); // DELETA UMA IMAGEM DE POSTAGEM DO USUÁRIO
     });
 
     // ROTAS AUTH
@@ -102,4 +104,5 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
 
     // ROTA AUTH
     Route::post('/login', 'LoginController@loginUser'); // LOGA USUARIO NA SESSAO
+    Route::post('/login/externo', 'LoginController@loginUserExterno'); // LOGA USUARIO NA SESSAO APÓS AUTENTICAÇÃO EXTERNA: GOOGLE, FACEBOOK, GITHUB...
 });
