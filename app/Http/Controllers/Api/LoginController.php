@@ -59,6 +59,10 @@ class LoginController extends Controller
 
             $user = User::where('email', $request->email)->first();
 
+            if ($user == null) {
+                return Response(['message' => 'Email não cadastrado'], Response::HTTP_NOT_FOUND);
+            }
+
             if ($user && Hash::check($request->google_id, $user->google_id)) {
                 $success = $user->createToken('Google')->plainTextToken;
                 return Response([
@@ -79,6 +83,10 @@ class LoginController extends Controller
 
             $user = User::where('email', $request->email)->first();
 
+            if ($user == null) {
+                return Response(['message' => 'Email não cadastrado'], Response::HTTP_NOT_FOUND);
+            }
+
             if ($user && Hash::check($request->facebook_id, $user->facebook_id)) {
                 $success = $user->createToken('Facebook')->plainTextToken;
                 return Response([
@@ -98,6 +106,10 @@ class LoginController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
+
+            if ($user == null) {
+                return Response(['message' => 'Email não cadastrado'], Response::HTTP_NOT_FOUND);
+            }
 
             if ($user && Hash::check($request->github_id, $user->github_id)) {
                 $success = $user->createToken('Github')->plainTextToken;
