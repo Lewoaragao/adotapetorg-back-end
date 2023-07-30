@@ -22,16 +22,6 @@ use Illuminate\Support\Str;
 class PetController extends Controller
 {
     /**
-     * @var Pet
-     */
-    private $pet;
-
-    public function __construct(Pet $pet)
-    {
-        $this->pet = $pet;
-    }
-
-    /**
      * Exibir uma listagem do recurso.
      */
     public function index()
@@ -45,7 +35,7 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        $caminhoImagem = "imagens/pet/placeholder-pet.jpg";
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['PET'];
 
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
@@ -55,7 +45,6 @@ class PetController extends Controller
         }
 
         $user = Auth::user();
-
         $pet = Pet::create([
             'user_id' => $user->id,
             'pet_tipos_id' => $request->pet_tipos_id,
@@ -83,13 +72,11 @@ class PetController extends Controller
     public function show(string $id)
     {
         $pet = Pet::find($id);
-
         if ($pet == null) {
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
         $cores = $pet->cores()->pluck('cor')->all();
-
         $userCadastrouPet = User::find($pet->user_id);
         $pet_favoritado = false;
 
@@ -107,17 +94,14 @@ class PetController extends Controller
     public function showPet(string $id)
     {
         $pet = Pet::find($id);
-
         if ($pet == null) {
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
         $cores = $pet->cores()->pluck('cor')->all();
-
         $userCadastrouPet = User::find($pet->user_id);
         $pet_favoritado = false;
         $userFavoritouPet = Auth::user();
-
         $is_favorito = DB::table('pets_favoritos')
             ->where('user_id', $userFavoritouPet->id)
             ->where('pet_id', $id)
@@ -142,17 +126,16 @@ class PetController extends Controller
     public function update(Request $request, $id)
     {
         $pet = Pet::find($id);
-
         if ($pet == null) {
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        $caminhoImagem = "imagens/pet/placeholder-pet.jpg";
-
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['PET'];
         if ($request->hasFile('imagem')) {
             $caminhoImagemAntiga = 'api/' . $pet->imagem;
+            $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
 
-            if (File::exists($caminhoImagemAntiga)) {
+            if (File::exists($caminhoImagemAntiga) && $caminhoImagemAntiga != $caminhoImagemPlaceholder) {
                 File::delete($caminhoImagemAntiga);
             }
 
