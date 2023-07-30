@@ -65,6 +65,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::post('/cadastrados/user', 'PetController@petsCadastradosUser');
         // BUSCA AS RAÇAS DO TIPO DE PET SELECIONADO
         Route::post('/racas/{id}', 'PetController@racasPetTipoId');
+        // ATUALIZA UMA IMAGEM DE PET
+        Route::post('/atualizar/imagem/{id}', 'PetController@updateImagemPet');
+        // DELETA UMA IMAGEM DE PET DO USUÁRIO
+        Route::post('/deletar/imagem/{id}', 'PetController@destroyImagemPet');
     });
 
     // ROTA LINKS
