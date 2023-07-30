@@ -333,7 +333,7 @@ class BlogPostagemController extends Controller
         $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
 
         if ($caminhoImagemPostagem == $caminhoImagemPlaceholder) {
-            return Response(['message' => 'Não é possível apagar a imagem de placeholder'], Response::HTTP_BAD_REQUEST);
+            return Response(['message' => 'Não é possível apagar a imagem padrão'], Response::HTTP_BAD_REQUEST);
         }
 
         if (File::exists($caminhoImagemPostagem) && $caminhoImagemPostagem !== $caminhoImagemPlaceholder) {
