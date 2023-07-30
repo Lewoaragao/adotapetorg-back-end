@@ -24,4 +24,10 @@ final class Constants
         'FACEBOOK' => 2,
         'GITHUB' => 3,
     ];
+
+    public const CAMINHO_IMAGEM_PLACEHOLDER = [
+        'USER' => 'imagens/user/placeholder-user.jpg',
+        'PET' => 'imagens/pet/placeholder-pet.jpg',
+        'BLOG' => 'imagens/blog/placeholder-blog.jpg',
+    ];
 }

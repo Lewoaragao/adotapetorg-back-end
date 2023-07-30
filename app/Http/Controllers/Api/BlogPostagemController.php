@@ -48,7 +48,11 @@ class BlogPostagemController extends Controller
         }
 
         if (empty($list_tags_sem_erro)) {
-            return Response(['message' => 'Nenhuma tag cadastrada, pois todas já existem, use as que já estão cadastradas'], Response::HTTP_CONFLICT);
+            return Response(
+                [
+                    'message' => 'Nenhuma tag cadastrada, pois todas já existem, use as que já estão cadastradas'
+                ], Response::HTTP_CONFLICT
+            );
         }
 
         if (empty($list_tags_com_erro)) {
@@ -78,7 +82,7 @@ class BlogPostagemController extends Controller
 
         $userAuth = Auth::user();
         $slug = Str::slug($request->titulo);
-        $caminhoImagem = "imagens/blog/placeholder-blog.jpg";
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['BLOG'];
 
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
@@ -126,7 +130,11 @@ class BlogPostagemController extends Controller
         }
 
         if (empty($list_tags_sem_erro)) {
-            return Response(['message' => 'Nenhuma tag cadastrada, pois todas já existem na postagem'], Response::HTTP_CONFLICT);
+            return Response(
+                [
+                    'message' => 'Nenhuma tag cadastrada, pois todas já existem na postagem'
+                ], Response::HTTP_CONFLICT
+            );
         }
 
         if (empty($list_tags_com_erro)) {
@@ -191,9 +199,12 @@ class BlogPostagemController extends Controller
             $postagem_favoritada = true;
         }
 
+        $primeiroNomeAutor = $postagem->autor()->pluck('primeiro_nome')->first();
+        $sobrenomeAutor = $postagem->autor()->pluck('sobrenome')->first();
+
         return Response([
             'postagem' => $postagem,
-            'autor' => $postagem->autor()->pluck('primeiro_nome')->first() . ' ' . $postagem->autor()->pluck('sobrenome')->first(),
+            'autor' => $primeiroNomeAutor . ' ' . $sobrenomeAutor,
             'tags' => $postagem->tags()->get(),
             'postagem_favoritada' => $postagem_favoritada
         ], Response::HTTP_OK);
@@ -211,22 +222,6 @@ class BlogPostagemController extends Controller
         }
 
         $postagem = BlogPostagem::find($id);
-
-        $caminhoImagem = "imagens/blog/placeholder-blog.jpg";
-
-        if ($request->hasFile('imagem')) {
-            $caminhoImagemAntiga = 'api/' . $postagem->imagem;
-
-            if (File::exists($caminhoImagemAntiga)) {
-                File::delete($caminhoImagemAntiga);
-            }
-
-            $imagem = $request->file('imagem');
-            $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api/imagens/blog/', $nomeImagem);
-            $caminhoImagem = '/imagens/blog/' . $nomeImagem;
-        }
-
         $slug = Str::slug($request->titulo);
 
         $postagem->update([
@@ -234,7 +229,6 @@ class BlogPostagemController extends Controller
             'subtitulo' => $request->subtitulo,
             'conteudo' => $request->conteudo,
             'slug' => $slug,
-            'imagem' => $caminhoImagem,
         ]);
 
         if ($request->tags != null) {
@@ -245,6 +239,38 @@ class BlogPostagemController extends Controller
         }
 
         return Response(['message' => 'Postagem atualizada com sucesso'], Response::HTTP_OK);
+    }
+
+    public function updateImagemPostagem(Request $request, string $id)
+    {
+
+        if ($request->imagem == null) {
+            return Response(['message' => 'Necessário envio de imagem'], Response::HTTP_CONFLICT);
+        }
+
+        $postagem = BlogPostagem::find($id);
+
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['BLOG'];
+
+        if ($request->hasFile('imagem')) {
+            $caminhoImagemAntiga = 'api/' . $postagem->imagem;
+            $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
+
+            if (File::exists($caminhoImagemAntiga) && $caminhoImagemAntiga != $caminhoImagemPlaceholder) {
+                File::delete($caminhoImagemAntiga);
+            }
+
+            $imagem = $request->file('imagem');
+            $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
+            $imagem->move('api/imagens/blog/', $nomeImagem);
+            $caminhoImagem = '/imagens/blog/' . $nomeImagem;
+        }
+
+        $postagem->update([
+            'imagem' => $caminhoImagem,
+        ]);
+
+        return Response(['message' => 'Imagem atualizada com sucesso'], Response::HTTP_OK);
     }
 
     /**
@@ -285,6 +311,42 @@ class BlogPostagemController extends Controller
         return Response(['message' => 'Postagem removida com sucesso'], Response::HTTP_OK);
     }
 
+    public function destroyImagemPostagem(string $id)
+    {
+        $postagem = BlogPostagem::find($id);
+        $userAuth = Auth::user();
+
+        if ($postagem == null) {
+            return Response(['message' => 'Postagem não encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $postagem->user_id) {
+            return Response(
+                [
+                    'message' => 'Não é possível alterar a postagem de outro usuário'
+                ], Response::HTTP_FORBIDDEN
+            );
+        }
+
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['BLOG'];
+        $caminhoImagemPostagem = 'api/' . $postagem->imagem;
+        $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
+
+        if ($caminhoImagemPostagem == $caminhoImagemPlaceholder) {
+            return Response(['message' => 'Não é possível apagar a imagem padrão'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (File::exists($caminhoImagemPostagem) && $caminhoImagemPostagem !== $caminhoImagemPlaceholder) {
+            File::delete($caminhoImagemPostagem);
+        }
+
+        $postagem->update([
+            'imagem' => $caminhoImagem,
+        ]);
+
+        return Response(['message' => 'Imagem removida com sucesso'], Response::HTTP_OK);
+    }
+
     public function postagensCadastradasUser()
     {
         $user = Auth::user();
@@ -313,7 +375,9 @@ class BlogPostagemController extends Controller
             ->whereIn('id', $listIdPostagensFavoritadas)
             ->paginate(Constants::REGISTROS_PAGINACAO);
 
-        return $postagens->isEmpty() ? Response(['message' => 'Nenhuma postagem favoritada'], Response::HTTP_NOT_FOUND) : Response($postagens, Response::HTTP_OK);
+        return $postagens->isEmpty()
+            ? Response(['message' => 'Nenhuma postagem favoritada'], Response::HTTP_NOT_FOUND)
+            : Response($postagens, Response::HTTP_OK);
     }
 
     public function favoritarPostagem(string $id)
@@ -351,7 +415,10 @@ class BlogPostagemController extends Controller
                     ->get()
                     ->first();
 
-                return Response(['message' => 'Postagem favoritada com sucesso', 'postagem' => $postagemFavoritada], Response::HTTP_OK);
+                return Response([
+                    'message' => 'Postagem favoritada com sucesso',
+                    'postagem' => $postagemFavoritada
+                ], Response::HTTP_OK);
             }
         }
 
@@ -360,7 +427,12 @@ class BlogPostagemController extends Controller
             'blog_postagem_id' => $postagem->id
         ]);
 
-        return Response(['message' => 'Postagem favoritada com sucesso', 'postagem' => $postagemFavoritada], Response::HTTP_OK);
+        return Response(
+            [
+                'message' => 'Postagem favoritada com sucesso',
+                'postagem' => $postagemFavoritada
+            ], Response::HTTP_OK
+        );
     }
 
     public function desfavoritarPostagem(string $id)
@@ -398,7 +470,12 @@ class BlogPostagemController extends Controller
                     ->get()
                     ->first();
 
-                return Response(['message' => 'Postagem desfavoritada com sucesso', 'postagem' => $postagemDesfavoritada], Response::HTTP_OK);
+                return Response(
+                    [
+                        'message' => 'Postagem desfavoritada com sucesso',
+                        'postagem' => $postagemDesfavoritada
+                    ], Response::HTTP_OK
+                );
             }
         }
 
@@ -413,6 +490,8 @@ class BlogPostagemController extends Controller
             ->get()
             ->first();
 
-        return Response(['message' => 'Postagem desfavoritada com sucesso', 'postagem' => $postagemDesfavoritada], Response::HTTP_OK);
+        return Response(
+            ['message' => 'Postagem desfavoritada com sucesso', 'postagem' => $postagemDesfavoritada], Response::HTTP_OK
+        );
     }
 }

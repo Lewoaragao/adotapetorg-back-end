@@ -44,7 +44,13 @@ class LoginController extends Controller
      */
     public function loginUserExterno(Request $request): Response
     {
-        $loginExternoTipo = $request->login_externo_tipo;
+        if ($request->google_id != null) {
+            $loginExternoTipo = Constants::LOGIN_EXTERNO_TIPO['GOOGLE'];
+        } elseif ($request->facebook_id != null) {
+            $loginExternoTipo = Constants::LOGIN_EXTERNO_TIPO['FACEBOOK'];
+        } elseif ($request->github_id != null) {
+            $loginExternoTipo = Constants::LOGIN_EXTERNO_TIPO['GITHUB'];
+        }
 
         if ($loginExternoTipo == Constants::LOGIN_EXTERNO_TIPO['GOOGLE']) {
 

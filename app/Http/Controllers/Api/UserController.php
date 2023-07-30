@@ -14,16 +14,6 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
     /**
-     * @var User
-     */
-    private $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -49,7 +39,7 @@ class UserController extends Controller
             return Response(['message' => 'Usuário já cadastrado'], Response::HTTP_CONFLICT);
         }
 
-        $caminhoImagem = "imagens/user/placeholder-user.jpg";
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['USER'];
 
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
@@ -113,15 +103,21 @@ class UserController extends Controller
 
         $data = $request->all();
         $user = User::find($data['id']);
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['USER'];
 
         if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $user->id) {
-            return Response(['message' => 'Não é possível alterar os dados de outro usuário'], Response::HTTP_FORBIDDEN);
+            return Response(
+                [
+                    'message' => 'Não é possível alterar os dados de outro usuário'
+                ], Response::HTTP_FORBIDDEN
+            );
         }
 
         if ($request->hasFile('imagem')) {
             $caminhoImagemAntiga = 'api/' . $user->imagem;
+            $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
 
-            if (File::exists($caminhoImagemAntiga)) {
+            if (File::exists($caminhoImagemAntiga) && $caminhoImagemAntiga != $caminhoImagemPlaceholder) {
                 File::delete($caminhoImagemAntiga);
             }
 
