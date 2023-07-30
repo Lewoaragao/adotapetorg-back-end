@@ -126,23 +126,18 @@ class PetController extends Controller
     public function update(Request $request, $id)
     {
         $pet = Pet::find($id);
+        $userAuth = Auth::user();
+
         if ($pet == null) {
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['PET'];
-        if ($request->hasFile('imagem')) {
-            $caminhoImagemAntiga = 'api/' . $pet->imagem;
-            $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
-
-            if (File::exists($caminhoImagemAntiga) && $caminhoImagemAntiga != $caminhoImagemPlaceholder) {
-                File::delete($caminhoImagemAntiga);
-            }
-
-            $imagem = $request->file('imagem');
-            $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
-            $imagem->move('api/imagens/pet/', $nomeImagem);
-            $caminhoImagem = '/imagens/pet/' . $nomeImagem;
+        if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $pet->user_id) {
+            return Response(
+                [
+                    'message' => 'Não é possível alterar o pet de outro usuário'
+                ], Response::HTTP_UNAUTHORIZED
+            );
         }
 
         $pet->cores()->detach(PetCor::where('pet_id', $pet->id)->pluck('cor_id'));
@@ -158,7 +153,6 @@ class PetController extends Controller
             'raca_id' => $request->raca_id,
             'data_nascimento' => $request->data_nascimento,
             'flg_adotado' => $request->flg_adotado,
-            'imagem' => $caminhoImagem,
             'data_adocao' => $request->data_adocao,
             'flg_ativo' => $request->flg_ativo,
             'apelido' => $request->apelido,
@@ -171,22 +165,118 @@ class PetController extends Controller
         return Response(['message' => 'Pet atualizado com sucesso'], Response::HTTP_OK);
     }
 
+    public function updateImagemPet(Request $request, string $id)
+    {
+        if ($request->imagem == null) {
+            return Response(['message' => 'Necessário envio de imagem'], Response::HTTP_CONFLICT);
+        }
+
+        $pet = Pet::find($id);
+        $userAuth = Auth::user();
+
+        if ($pet == null) {
+            return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $pet->user_id) {
+            return Response(
+                [
+                    'message' => 'Não é possível alterar o pet de outro usuário'
+                ], Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['PET'];
+
+        if ($request->hasFile('imagem')) {
+            $caminhoImagemAntiga = 'api/' . $pet->imagem;
+            $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
+
+            if (File::exists($caminhoImagemAntiga) && $caminhoImagemAntiga != $caminhoImagemPlaceholder) {
+                File::delete($caminhoImagemAntiga);
+            }
+
+            $imagem = $request->file('imagem');
+            $nomeImagem = Str::uuid()->toString() . '.' . $imagem->getClientOriginalExtension();
+            $imagem->move('api/imagens/pet/', $nomeImagem);
+            $caminhoImagem = '/imagens/pet/' . $nomeImagem;
+        }
+
+        $pet->update([
+            'imagem' => $caminhoImagem,
+        ]);
+
+        return Response(['message' => 'Imagem atualizada com sucesso'], Response::HTTP_OK);
+    }
+
     /**
      * Remova o recurso especificado do armazenamento.
      */
     public function destroy(string $id)
     {
         $pet = Pet::find($id);
+        $userAuth = Auth::user();
+
+        if ($pet == null) {
+            return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $pet->user_id) {
+            return Response(
+                [
+                    'message' => 'Não é possível alterar o pet de outro usuário'
+                ], Response::HTTP_UNAUTHORIZED
+            );
+        }
+
         $pet->cores()->detach(PetCor::where('pet_id', $pet->id)->pluck('cor_id'));
 
-        $caminhoImagemPostagem = 'api/' . $pet->imagem;
-        if ($caminhoImagemPostagem !== "api/imagens/pet/placeholder-pet.jpg" && File::exists($caminhoImagemPostagem)) {
-            File::delete($caminhoImagemPostagem);
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['PET'];
+        $caminhoImagemAntiga = 'api/' . $pet->imagem;
+        $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
+        if ($caminhoImagemAntiga !== $caminhoImagemPlaceholder && File::exists($caminhoImagemAntiga)) {
+            File::delete($caminhoImagemAntiga);
         }
 
         $pet->delete();
 
         return Response(['message' => 'Pet foi removido com sucesso'], Response::HTTP_OK);
+    }
+
+    public function destroyImagemPet(string $id)
+    {
+        $pet = Pet::find($id);
+        $userAuth = Auth::user();
+
+        if ($pet == null) {
+            return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $pet->user_id) {
+            return Response(
+                [
+                    'message' => 'Não é possível alterar o pet de outro usuário'
+                ], Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['PET'];
+        $caminhoImagemPostagem = 'api/' . $pet->imagem;
+        $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
+
+        if ($caminhoImagemPostagem == $caminhoImagemPlaceholder) {
+            return Response(['message' => 'Não é possível apagar a imagem padrão'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (File::exists($caminhoImagemPostagem) && $caminhoImagemPostagem !== $caminhoImagemPlaceholder) {
+            File::delete($caminhoImagemPostagem);
+        }
+
+        $pet->update([
+            'imagem' => $caminhoImagem,
+        ]);
+
+        return Response(['message' => 'Imagem removida com sucesso'], Response::HTTP_OK);
     }
 
     public function favoritar(string $id)

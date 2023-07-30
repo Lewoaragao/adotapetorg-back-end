@@ -169,10 +169,12 @@ class BlogPostagemController extends Controller
         }
 
         $postagem_favoritada = false;
+        $autorPrimeiroNome = $postagem->autor()->pluck('primeiro_nome')->first();
+        $autorSobrenome = $postagem->autor()->pluck('sobrenome')->first();
 
         return Response([
             'postagem' => $postagem,
-            'autor' => $postagem->autor()->pluck('primeiro_nome')->first() . ' ' . $postagem->autor()->pluck('sobrenome')->first(),
+            'autor' => $autorPrimeiroNome . ' ' . $autorSobrenome,
             'tags' => $postagem->tags()->get(),
             'postagem_favoritada' => $postagem_favoritada
         ], Response::HTTP_OK);
@@ -232,7 +234,9 @@ class BlogPostagemController extends Controller
         ]);
 
         if ($request->tags != null) {
-            $postagem->tags()->detach(BlogPostagemTag::where('blog_postagens_id', $postagem->id)->pluck('blog_tags_id'));
+            $postagem->tags()->detach(
+                BlogPostagemTag::where('blog_postagens_id', $postagem->id)->pluck('blog_tags_id')
+            );
             $tags = $request->tags;
             $tags = BlogTag::whereIn('tag', $tags)->get();
             $postagem->tags()->attach($tags);
@@ -243,13 +247,11 @@ class BlogPostagemController extends Controller
 
     public function updateImagemPostagem(Request $request, string $id)
     {
-
         if ($request->imagem == null) {
             return Response(['message' => 'Necessário envio de imagem'], Response::HTTP_CONFLICT);
         }
 
         $postagem = BlogPostagem::find($id);
-
         $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['BLOG'];
 
         if ($request->hasFile('imagem')) {
@@ -286,7 +288,11 @@ class BlogPostagemController extends Controller
         }
 
         if ($userAuth->user_tipo !== "admin" && $userAuth->id !== $postagem->user_id) {
-            return Response(['message' => 'Não é possível alterar a postagem de outro usuário'], Response::HTTP_FORBIDDEN);
+            return Response(
+                [
+                    'message' => 'Não é possível alterar a postagem de outro usuário'
+                ], Response::HTTP_FORBIDDEN
+            );
         }
 
         $tags = BlogPostagemTag::where('blog_postagens_id', $id);
@@ -301,9 +307,11 @@ class BlogPostagemController extends Controller
             BlogPostagemFavorita::where('blog_postagem_id', $id)->delete();
         }
 
-        $caminhoImagemPostagem = 'api/' . $postagem->imagem;
-        if ($caminhoImagemPostagem !== "api/imagens/blog/placeholder-blog.jpg" && File::exists($caminhoImagemPostagem)) {
-            File::delete($caminhoImagemPostagem);
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['BLOG'];
+        $caminhoImagemAntiga = 'api/' . $postagem->imagem;
+        $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
+        if ($caminhoImagemAntiga !== $caminhoImagemPlaceholder && File::exists($caminhoImagemAntiga)) {
+            File::delete($caminhoImagemAntiga);
         }
 
         $postagem->delete();
@@ -324,7 +332,7 @@ class BlogPostagemController extends Controller
             return Response(
                 [
                     'message' => 'Não é possível alterar a postagem de outro usuário'
-                ], Response::HTTP_FORBIDDEN
+                ], Response::HTTP_UNAUTHORIZED
             );
         }
 

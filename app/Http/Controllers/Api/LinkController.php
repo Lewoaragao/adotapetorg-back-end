@@ -127,9 +127,11 @@ class LinkController extends Controller
     {
         $userLink = UserLink::find($id);
 
-        $caminhoImagemPostagem = 'api/' . $userLink->imagem;
-        if ($caminhoImagemPostagem !== "api/imagens/link/placeholder-link.jpg" && File::exists($caminhoImagemPostagem)) {
-            File::delete($caminhoImagemPostagem);
+        $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['LINK'];
+        $caminhoImagemAntiga = 'api/' . $userLink->imagem;
+        $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
+        if ($caminhoImagemAntiga !== $caminhoImagemPlaceholder && File::exists($caminhoImagemAntiga)) {
+            File::delete($caminhoImagemAntiga);
         }
 
         $userLink->delete();
