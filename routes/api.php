@@ -79,8 +79,12 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         Route::post('/visualizar/{id}', 'LinkController@show');
         // ATUALIZA UM LINK DO USUÁRIO
         Route::post('/atualizar/{id}', 'LinkController@update');
+        // ATUALIZA UMA IMAGEM DE LINK
+        Route::post('/atualizar/imagem/{id}', 'LinkController@updateImagemLink');
         // DELETA UM LINK DO USUÁRIO
         Route::post('/deletar/{id}', 'LinkController@destroy');
+        // DELETA UMA IMAGEM DE LINK DO USUÁRIO
+        Route::post('/deletar/imagem/{id}', 'LinkController@destroyImagemLink');
     });
 
     // ROTA BLOG
