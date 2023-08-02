@@ -261,15 +261,15 @@ class PetController extends Controller
         }
 
         $caminhoImagem = Constants::CAMINHO_IMAGEM_PLACEHOLDER['PET'];
-        $caminhoImagemPostagem = 'api/' . $pet->imagem;
+        $caminhoImagemPet = 'api/' . $pet->imagem;
         $caminhoImagemPlaceholder = 'api/' . $caminhoImagem;
 
-        if ($caminhoImagemPostagem == $caminhoImagemPlaceholder) {
+        if ($caminhoImagemPet == $caminhoImagemPlaceholder) {
             return Response(['message' => 'Não é possível apagar a imagem padrão'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (File::exists($caminhoImagemPostagem) && $caminhoImagemPostagem !== $caminhoImagemPlaceholder) {
-            File::delete($caminhoImagemPostagem);
+        if (File::exists($caminhoImagemPet) && $caminhoImagemPet !== $caminhoImagemPlaceholder) {
+            File::delete($caminhoImagemPet);
         }
 
         $pet->update([

@@ -16,7 +16,7 @@ final class Constants
     ];
 
     public const LINK_TIPO = [
-        'EXTERNO' => 9,
+        'EXTERNO' => 1,
     ];
 
     public const LOGIN_EXTERNO_TIPO = [
