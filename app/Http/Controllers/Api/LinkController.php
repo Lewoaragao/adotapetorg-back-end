@@ -62,7 +62,9 @@ class LinkController extends Controller
         }
 
         if ($userLink->user_id != $user->id) {
-            return Response(['message' => 'Não é possível editar o link de outro usuário'], Response::HTTP_BAD_REQUEST);
+            return Response(
+                ['message' => 'Não é possível editar o link de outro usuário'], Response::HTTP_BAD_REQUEST
+            );
         }
 
         return Response($userLink);
