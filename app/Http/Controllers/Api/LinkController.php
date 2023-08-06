@@ -186,7 +186,7 @@ class LinkController extends Controller
             return Response(['message' => 'Link não encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        if ($link->imagem === "") {
+        if ($link->imagem === null) {
             return Response(['message' => 'Não há imagem para ser removida'], Response::HTTP_NOT_FOUND);
         }
 

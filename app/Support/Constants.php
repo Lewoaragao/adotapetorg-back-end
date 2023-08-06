@@ -11,8 +11,8 @@ final class Constants
     public const REGISTROS_PAGINACAO = 12;
 
     public const USER_TIPO = [
-        'USER',
-        'ADMIN'
+        'USER' => 'user',
+        'ADMIN' => 'admin',
     ];
 
     public const LINK_TIPO = [
