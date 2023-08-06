@@ -38,9 +38,13 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         // SALVA UM USER
         Route::post('/', 'UserController@store');
         // ATUALIZA UM USER
-        Route::post('/atualizar', 'UserController@update');
+        Route::post('/atualizar/{id}', 'UserController@update');
+        // ATUALIZA A IMAGEM DE PERFIL DO USUÁRIO
+        Route::post('/atualizar/imagem/{id}', 'UserController@updateImagemUser');
         // DELETA UM USER
         Route::delete('/{id}', 'UserController@destroy');
+        // DELETA A IMAGEM DE PERFIL DO USUÁRIO
+        Route::post('/deletar/imagem/{id}', 'UserController@destroyImagemUser');
     });
 
     // ROTA PETS

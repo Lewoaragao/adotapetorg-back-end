@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -30,9 +29,12 @@ return new class extends Migration
             $table->boolean('flg_celular_whatsapp')->default(0);
             $table->string('user_tipo')->default("user");
             $table->string('link');
-            $table->string('endereco_cidade')->nullable();
-            $table->string('endereco_estado')->nullable();
+            $table->integer('id_pais')->nullable();
             $table->string('endereco_pais')->nullable();
+            $table->integer('id_estado')->nullable();
+            $table->string('endereco_estado')->nullable();
+            $table->integer('id_cidade')->nullable();
+            $table->string('endereco_cidade')->nullable();
             $table->string('google_id')->unique()->nullable();
             $table->string('facebook_id')->unique()->nullable();
             $table->string('github_id')->unique()->nullable();
