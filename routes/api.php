@@ -52,7 +52,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         // LISTA TODOS OS PET
         Route::get('/', 'PetController@index');
         // MOSTRA UM PET
-        Route::post('/visualizar/{id}', 'PetController@showPet');
+        Route::get('/visualizar/{id}', 'PetController@showPet');
         // SALVA UM PET
         Route::post('/', 'PetController@store');
         // ATUALIZA UM PET
@@ -64,9 +64,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         // DESFAVORITA UM PET
         Route::post('/{id}/desfavoritar', 'PetController@desfavoritar');
         // BUSCA OS PETS FAVORITOS DO USER
-        Route::post('/favoritos/user', 'PetController@petsFavoritosUser');
+        Route::get('/favoritos/user', 'PetController@petsFavoritosUser');
         // BUSCA OS PETS CADASTRADOS DO USER
-        Route::post('/cadastrados/user', 'PetController@petsCadastradosUser');
+        Route::get('/cadastrados/user', 'PetController@petsCadastradosUser');
         // BUSCA AS RAÇAS DO TIPO DE PET SELECIONADO
         Route::post('/racas/{id}', 'PetController@racasPetTipoId');
         // ATUALIZA UMA IMAGEM DE PET

@@ -80,11 +80,16 @@ class PetController extends Controller
         $userCadastrouPet = User::find($pet->user_id);
         $pet_favoritado = false;
 
+        $raca = Raca::find($pet->raca_id);
+        $tipo = PetTipo::find($pet->pet_tipos_id);
+
         return Response([
             'pet' => $pet,
             'pet_cores' => $cores,
             'user' => $userCadastrouPet,
-            'pet_favoritado' => $pet_favoritado
+            'pet_favoritado' => $pet_favoritado,
+            'raca' => $raca,
+            'tipo' => $tipo
         ]);
     }
 
@@ -94,6 +99,7 @@ class PetController extends Controller
     public function showPet(string $id)
     {
         $pet = Pet::find($id);
+
         if ($pet == null) {
             return Response(['message' => 'Pet não encontrado'], Response::HTTP_NOT_FOUND);
         }
@@ -112,11 +118,16 @@ class PetController extends Controller
             $pet_favoritado = true;
         }
 
+        $raca = Raca::find($pet->raca_id);
+        $tipo = PetTipo::find($pet->pet_tipos_id);
+
         return Response([
             'pet' => $pet,
             'pet_cores' => $cores,
             'user' => $userCadastrouPet,
-            'pet_favoritado' => $pet_favoritado
+            'pet_favoritado' => $pet_favoritado,
+            'raca' => $raca,
+            'tipo' => $tipo
         ]);
     }
 
