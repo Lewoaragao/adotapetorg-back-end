@@ -110,9 +110,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'middleware' => 'auth:s
         // DESFAVORITA UMA POSTAGEM
         Route::post('/{id}/desfavoritar', 'BlogPostagemController@desfavoritarPostagem');
         // BUSCA AS POSTAGENS FAVORITAS DO USER
-        Route::post('/postagens/favoritas/user', 'BlogPostagemController@postagensFavoritasUser');
+        Route::get('/postagens/favoritas/user', 'BlogPostagemController@postagensFavoritasUser');
         // BUSCA AS POSTAGENS CADASTRADAS DO USER
-        Route::post('/postagens/cadastradas/user', 'BlogPostagemController@postagensCadastradasUser');
+        Route::get('/postagens/cadastradas/user', 'BlogPostagemController@postagensCadastradasUser');
         // DELETA UMA POSTAGEM DO USUÁRIO
         Route::post('/deletar/{id}', 'BlogPostagemController@destroyPostagem');
         // DELETA UMA IMAGEM DE POSTAGEM DO USUÁRIO
